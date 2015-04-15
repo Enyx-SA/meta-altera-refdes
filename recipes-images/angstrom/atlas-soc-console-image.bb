@@ -1,6 +1,7 @@
 require recipes-images/angstrom/extended-console-image.bb
 
 IMAGE_INSTALL += " \
+	kernel-headers \
 	kernel-modules \
 	linux-firmware \
 	usbutils \
