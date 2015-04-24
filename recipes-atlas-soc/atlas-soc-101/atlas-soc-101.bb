@@ -2,7 +2,7 @@ DESCRIPTION = "Atlas SoC web content"
 AUTHOR = "Dalon Westergreen <dwesterg@gmail.com>"
 SECTION = "atlas-soc"
 
-LICENSE = "MIT & LGPLv3 & others"
+LICENSE = "MIT & LGPLv3"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=f02920251cbdc9b014dc1cbdb2bb95c4"
 
 PV = "1.0"
