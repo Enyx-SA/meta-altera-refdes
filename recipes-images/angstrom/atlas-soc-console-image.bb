@@ -23,6 +23,6 @@ IMAGE_INSTALL += " \
 	atlas-soc-101 \
 	atlas-soc-usb-gadget \
 	gator \
-	fft_driver-mod \
+	fftdriver-mod \
 "
 export IMAGE_BASENAME = "atlas-soc-console-image"
