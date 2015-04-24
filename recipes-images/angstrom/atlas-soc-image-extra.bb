@@ -2,7 +2,6 @@ require atlas-soc-image.bb
 
 IMAGE_INSTALL += " \
 	gateone \
-	cloud9 \
 	packagegroup-core-x11-xserver \
 	angstrom-gnome-icon-theme-enable gtk-engine-clearlooks gtk-theme-clearlooks angstrom-clearlooks-theme-enable \
 	xserver-nodm-init \
