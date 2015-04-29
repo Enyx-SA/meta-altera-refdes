@@ -24,5 +24,6 @@ IMAGE_INSTALL += " \
 	atlas-soc-usb-gadget \
 	gator \
 	fftdriver-mod \
+	gnuplot \
 "
 export IMAGE_BASENAME = "atlas-soc-console-image"
