@@ -1,5 +1,7 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-${PV}:"
 
+PR = "r1"
+
 KERNEL_DEVICETREE = "socfpga_vt socfpga_cyclone5 socfpga_arria5 socfpga_cyclone5_atlas_socdk"
 
 SRC_URI += "file://leds.cfg"

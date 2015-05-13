@@ -1,5 +1,7 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-${PV}:"
 
+PR = "r1"
+
 SRC_URI += "file://leds.cfg"
 SRC_URI += "file://usb_gadget.cfg"
 SRC_URI += "file://uio.cfg"
