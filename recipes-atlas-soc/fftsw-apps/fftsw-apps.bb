@@ -13,9 +13,9 @@ SRC_URI = " \
 S = "${WORKDIR}/git"
 
 do_compile () {
-	source ${S}/build_ne10.sh
-	source ${S}/build_all.sh
-	source ${S}/archive_for_target.sh
+	./${S}/build_ne10.sh
+	./${S}/build_all.sh
+	./${S}/archive_for_target.sh
 }
 
 do_install () {
