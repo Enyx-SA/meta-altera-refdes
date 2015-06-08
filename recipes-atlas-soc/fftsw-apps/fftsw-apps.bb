@@ -7,7 +7,8 @@ PR = "r0"
 SRCREV = "${AUTOREV}"
 
 SRC_URI = " \
-	git://github.com/dwesterg/atlas-soc-fftsw-apps.git \
+	git://github.com/dwesterg/atlas-soc-fftsw-apps.git;protocol=git;name=fftsw-apps \
+	git://github.com/projectNe10/Ne10.git;protocol=git;name=ne10 \
 "
 
 S = "${WORKDIR}/git"
