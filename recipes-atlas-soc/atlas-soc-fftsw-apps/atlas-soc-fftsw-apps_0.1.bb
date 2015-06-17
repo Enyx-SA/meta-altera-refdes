@@ -10,6 +10,7 @@ SRCREV_ne10 = "${AUTOREV}"
 SRC_URI = " \
 	git://github.com/dwesterg/atlas-soc-fftsw-apps.git;name=fftsw_apps;destsuffix=fftsw_apps \
 	git://github.com/projectNe10/Ne10.git;name=ne10;destsuffix=ne10 \
+	file://build_fftapps.sh \
 "
 S = "${WORKDIR}"
 
@@ -136,18 +137,23 @@ do_compile () {
 	do_compile_ne10
 	do_compile_lib
 	do_compile_apps
+
+	cd ${S}/fftsw_apps
+	tar -czvf ${S}/fftsw_apps/fft.tgz ${FFT_APPS} ${FFT_SCRIPTS} README_TARGET.TXT 
 }
 
 do_install () {
-	cd ${S}/fftsw_apps
-	tar -czvf ${S}/fftsw_apps/fft.tgz ${FFT_APPS} ${FFT_SCRIPTS} README_TARGET.TXT 
 	
-	install -d ${D}/examples
-	install -d ${D}/examples/fft
 	install -d ${D}/examples/fft/bin
 	cp -a ${S}/fftsw_apps/fft.tgz ${D}/examples/fft/bin/
 	cp -a ${S}/fftsw_apps/README_TARGET.TXT ${D}/examples/fft/bin/
 	cp -a ${S}/fftsw_apps/setup_target_fft_env.sh ${D}/examples/fft/bin/
+
+	install -d ${D}/examples/fft/src
+	cp -a build_fftapps.sh ${D}/examples/fft/src
 }
 
+FILES_${PN} += "examples/fft/bin"
 
+PACKAGES =+ "${PN}-src"
+FILES_${PN}-src += "examples/fft/src"

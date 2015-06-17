@@ -22,8 +22,8 @@ IMAGE_INSTALL += " \
 	atlas-soc-lighttpd-conf \
 	atlas-soc-101 \
 	atlas-soc-usb-gadget \
-	fftdriver-mod \
-	fftsw-apps \
+	atlas-soc-fftdriver-mod \
+	atlas-soc-fftsw-apps \
 	gnuplot \
 "
 export IMAGE_BASENAME = "atlas-soc-console-image"
