@@ -163,6 +163,7 @@ do_install () {
 	done
 
 	cp ${S}/fftsw_apps/*.TXT ${D}/examples/fft/src/fftsw_app
+	cp -a ${S}/fftsw_apps/images ${D}/examples/fft/src/fftsw_app
 
 	wget -O ${S}/ne10.tgz https://github.com/projectNe10/Ne10/tarball/master
 
