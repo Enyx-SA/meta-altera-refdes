@@ -24,6 +24,8 @@ IMAGE_INSTALL += " \
 	atlas-soc-usb-gadget \
 	atlas-soc-fftdriver-mod \
 	atlas-soc-fftsw-apps \
+	atlas-soc-fftsw-apps-src \
 	gnuplot \
+	cmake \
 "
 export IMAGE_BASENAME = "atlas-soc-console-image"

@@ -2,7 +2,7 @@ SUMMARY = "Example application for Atlas SoC FPGA FFT Benchmarking"
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://fftsw_apps/COPYING;md5=12f884d2ae1ff87c09e5b7ccc2c4ca7e"
 
-PR = "r1"
+PR = "r2"
 
 SRCREV_fftsw_apps = "${AUTOREV}"
 SRCREV_ne10 = "${AUTOREV}"
@@ -151,6 +151,23 @@ do_install () {
 
 	install -d ${D}/examples/fft/src
 	cp -a build_fftapps.sh ${D}/examples/fft/src
+	install -d ${D}/examples/fft/src/fftsw_app
+	install -d ${D}/examples/fft/src/ne10
+	
+	for i in ${FFT_APPS}; do
+		cp ${S}/fftsw_apps/$i.c ${D}/examples/fft/src/fftsw_app
+	done
+
+	for i in ${FFT_SCRIPTS}; do
+		cp ${S}/fftsw_apps/$i ${D}/examples/fft/src/fftsw_app
+	done
+
+	cp ${S}/fftsw_apps/*.TXT ${D}/examples/fft/src/fftsw_app
+
+	wget -O ${S}/ne10.tgz https://github.com/projectNe10/Ne10/tarball/master
+
+	tar -xvf ${S}/ne10.tgz --strip-components=1 -C ${D}/examples/fft/src/ne10
+
 }
 
 FILES_${PN} += "examples/fft/bin"
