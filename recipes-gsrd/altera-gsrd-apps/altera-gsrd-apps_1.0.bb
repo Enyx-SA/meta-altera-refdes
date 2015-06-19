@@ -4,11 +4,12 @@ SECTION = "gsrd"
 LICENSE = "BSD-3-Clause"
 LIC_FILES_CHKSUM="file://${COMMON_LICENSE_DIR}/BSD-3-Clause;md5=550794465ba0ec5312d6919e203a55f9"
 S="${WORKDIR}/git"
+DEPENDS="ncurses"
 
-REFDES_REPO ?= "git://git.rocketboards.org/linux-refdesigns.git"
+REFDES_REPO ?= "git://github.com/altera-opensource/linux-refdesigns.git"
 REFDES_PROT ?= "http"
-REFDES_BRANCH ?= "socfpga-14.0.1"
-SRCREV = "1c757ba635747c7ddbdc4746d62820b0c1fa9f7f"
+REFDES_BRANCH ?= "socfpga-15.0.1"
+SRCREV = "e06d1b3d3b99f92c2e41d64a048a212bd03c2442"
 
 SRC_URI = "${REFDES_REPO};protocol=${REFDES_PROT};branch=${REFDES_BRANCH} "
 
@@ -34,6 +35,7 @@ do_install() {
         install -m 0755 scroll_client/scroll_client ${D}/www/pages/cgi-bin/scroll_client
         install -m 0755 toggle/toggle ${D}/www/pages/cgi-bin/toggle
 
+        install -m 0755 syschk/syschk ${D}/home/root/altera/syschk
         install -m 0755 blink/blink ${D}/home/root/altera/blink
         install -m 0755 scroll_client/scroll_client ${D}/home/root/altera/scroll_client
         install -m 0755 toggle/toggle ${D}/home/root/altera/toggle
