@@ -9,6 +9,7 @@ IMAGE_INSTALL += " \
 	ttf-dejavu-sans ttf-dejavu-sans-mono ttf-dejavu-common \
 	angstrom-packagegroup-gnome gimp abiword gedit midori epiphany firefox matchbox-terminal \
 	xterm \
+	imagemagick \
 "
 
 export IMAGE_BASENAME = "atlas-soc-image-extra"
