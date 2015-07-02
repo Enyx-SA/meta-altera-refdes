@@ -18,18 +18,6 @@ LED_FILES += "toggle_fpga_leds.sh"
 
 S = "${WORKDIR}"
 
-#do_configure () {
-#	cd ${S}/fftsw_apps
-#	rm -rf Ne10-master
-#	bash clean_all.sh
-#}
-
-#do_compile () {
-#	cd ${S}/fftsw_apps
-#	bash build_ne10.sh
-#	bash build_all.sh
-#}
-
 do_install () {
 	
 	cd ${S}
