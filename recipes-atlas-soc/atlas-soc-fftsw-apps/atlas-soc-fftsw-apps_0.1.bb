@@ -2,10 +2,9 @@ SUMMARY = "Example application for Atlas SoC FPGA FFT Benchmarking"
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://fftsw_apps/COPYING;md5=12f884d2ae1ff87c09e5b7ccc2c4ca7e"
 
-PR = "r4"
+PR = "r5"
 
 SRCREV_fftsw_apps = "${AUTOREV}"
-SRCREV_ne10 = "${AUTOREV}"
 
 SRC_URI = " \
 	git://github.com/dwesterg/atlas-soc-fftsw-apps.git;name=fftsw_apps;destsuffix=fftsw_apps \
@@ -45,10 +44,12 @@ do_install () {
 	tar xf fft_sandbox.tgz -C ${D}/examples/fft/sandbox
 }
 
-FILES_${PN} += "examples/fft/bin"
+FILES_${PN} += "examples/fft/bin/"
 
 PACKAGES =+ "${PN}-src"
-FILES_${PN}-src += "examples/fft"
-FILES_${PN}-src += "examples/fft/src"
-FILES_${PN}-src += "examples/fft/sandbox"
+RDEPENDS_${PN}-src += "gnuplot"
+FILES_${PN}-src += "examples/fft/fft_src.tgz"
+FILES_${PN}-src += "examples/fft/fft_sandbox.tgz"
+FILES_${PN}-src += "examples/fft/src/"
+FILES_${PN}-src += "examples/fft/sandbox/"
 

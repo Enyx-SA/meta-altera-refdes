@@ -2,7 +2,7 @@ SUMMARY = "Example application for Atlas SoC FPGA LED manipulation"
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=12f884d2ae1ff87c09e5b7ccc2c4ca7e"
 
-PR = "r0"
+PR = "r1"
 
 SRC_URI = "\
 	file://COPYING \
@@ -30,7 +30,5 @@ do_install () {
 	cp -a led_sandbox.tgz ${D}/examples/led
 }
 
-PACKAGES =+ "${PN}-src"
-FILES_${PN}-src += "examples/led"
-FILES_${PN}-src += "examples/led/sandbox"
+FILES_${PN} += "examples/led/"
 
