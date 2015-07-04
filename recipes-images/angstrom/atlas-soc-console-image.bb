@@ -1,8 +1,9 @@
 require recipes-images/angstrom/extended-console-image.bb
 
 IMAGE_INSTALL += " \
-	kernel-headers \
 	kernel-modules \
+	kernel-dev \
+	kernel-devsrc \
 	linux-firmware \
 	usbutils \
 	libusbg \

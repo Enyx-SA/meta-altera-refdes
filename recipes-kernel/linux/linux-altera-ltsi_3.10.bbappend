@@ -1,8 +1,8 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-${PV}:"
+FILESEXTRAPATHS_prepend := "${THISDIR}/linux-altera-ltsi-3.10:"
 
 PR = "r1"
 
-KERNEL_DEVICETREE = "socfpga_vt socfpga_cyclone5 socfpga_arria5 socfpga_cyclone5_atlas_socdk"
+KERNEL_DEVICETREE += " socfpga_cyclone5_atlas_socdk.dtb"
 
 SRC_URI += "file://leds.cfg"
 SRC_URI += "file://usb_gadget.cfg"
