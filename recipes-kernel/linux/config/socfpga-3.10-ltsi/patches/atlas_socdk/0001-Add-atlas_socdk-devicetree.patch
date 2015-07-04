@@ -1,21 +1,21 @@
-From a079fc19527d03ee0ecee10706d1278a8cb3a5b2 Mon Sep 17 00:00:00 2001
+From 7829b11779d837a4abca30f9d123cb3261449183 Mon Sep 17 00:00:00 2001
 From: Dalon Westergreen <dwesterg@gmail.com>
-Date: Wed, 13 May 2015 08:26:54 -0700
-Subject: [PATCH] Add atlas dts
+Date: Sat, 4 Jul 2015 12:42:26 -0700
+Subject: [PATCH] Add atlas_socdk devicetree
 
 ---
- arch/arm/boot/dts/socfpga_cyclone5_atlas_socdk.dts | 126 ++++++++++++
+ arch/arm/boot/dts/socfpga_cyclone5_atlas_socdk.dts | 124 ++++++++++++
  .../dts/socfpga_cyclone5_atlas_socdk_fpga.dtsi     | 225 +++++++++++++++++++++
- 2 files changed, 351 insertions(+)
+ 2 files changed, 349 insertions(+)
  create mode 100644 arch/arm/boot/dts/socfpga_cyclone5_atlas_socdk.dts
  create mode 100644 arch/arm/boot/dts/socfpga_cyclone5_atlas_socdk_fpga.dtsi
 
 diff --git a/arch/arm/boot/dts/socfpga_cyclone5_atlas_socdk.dts b/arch/arm/boot/dts/socfpga_cyclone5_atlas_socdk.dts
 new file mode 100644
-index 0000000..9d811c2
+index 0000000..b610611
 --- /dev/null
 +++ b/arch/arm/boot/dts/socfpga_cyclone5_atlas_socdk.dts
-@@ -0,0 +1,126 @@
+@@ -0,0 +1,124 @@
 +/*
 + * Copyright Altera Corporation (C) 2014. All rights reserved.
 + *
@@ -106,12 +106,10 @@ index 0000000..9d811c2
 +			status = "okay";
 +			
 +			adxl345: adxl345@0 {
-+				#interrupt-cells = <2>;
-+				compatible = "adi,adxl34x";
-+				reg = <83>;
-+				interrupt-controller;
-+				interrupt-parent = <&gpio2>;
-+				interrupts = <2 0x4>;
++				compatible = "adxl34x";
++				reg = <0x53>;
++				interrupt-parent = <&intc>;
++				interrupts = <0 46 4>;
 +			};
 +		};
 +
@@ -144,7 +142,7 @@ index 0000000..9d811c2
 +};
 diff --git a/arch/arm/boot/dts/socfpga_cyclone5_atlas_socdk_fpga.dtsi b/arch/arm/boot/dts/socfpga_cyclone5_atlas_socdk_fpga.dtsi
 new file mode 100644
-index 0000000..fb390f3
+index 0000000..beda2a5
 --- /dev/null
 +++ b/arch/arm/boot/dts/socfpga_cyclone5_atlas_socdk_fpga.dtsi
 @@ -0,0 +1,225 @@
@@ -299,42 +297,42 @@ index 0000000..fb390f3
 +
 +			led_fpga0: fpga0 {
 +				label = "fpga_led0";
-+				gpios = <&led_pio 0 1>;
++				gpios = <&led_pio 0 0>;
 +			}; //end fpga0 (led_fpga0)
 +
 +			led_fpga1: fpga1 {
 +				label = "fpga_led1";
-+				gpios = <&led_pio 1 1>;
++				gpios = <&led_pio 1 0>;
 +			}; //end fpga1 (led_fpga1)
 +
 +			led_fpga2: fpga2 {
 +				label = "fpga_led2";
-+				gpios = <&led_pio 2 1>;
++				gpios = <&led_pio 2 0>;
 +			}; //end fpga2 (led_fpga2)
 +
 +			led_fpga3: fpga3 {
 +				label = "fpga_led3";
-+				gpios = <&led_pio 3 1>;
++				gpios = <&led_pio 3 0>;
 +			}; //end fpga3 (led_fpga3)
 +
 +			led_fpga4: fpga4 {
 +				label = "fpga_led4";
-+				gpios = <&led_pio 4 1>;
++				gpios = <&led_pio 4 0>;
 +			}; //end fpga4 (led_fpga4)
 +
 +			led_fpga5: fpga5 {
 +				label = "fpga_led5";
-+				gpios = <&led_pio 5 1>;
++				gpios = <&led_pio 5 0>;
 +			}; //end fpga5 (led_fpga5)
 +
 +			led_fpga6: fpga6 {
 +				label = "fpga_led6";
-+				gpios = <&led_pio 6 1>;
++				gpios = <&led_pio 6 0>;
 +			}; //end fpga6 (led_fpga6)
 +
 +			led_fpga7: fpga7 {
 +				label = "fpga_led7";
-+				gpios = <&led_pio 7 1>;
++				gpios = <&led_pio 7 0>;
 +			}; //end fpga7 (led_fpga7)
 +
 +
