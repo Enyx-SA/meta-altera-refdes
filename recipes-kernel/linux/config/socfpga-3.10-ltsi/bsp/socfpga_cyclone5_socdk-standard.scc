@@ -1,0 +1,14 @@
+define KMACHINE socfpga_cyclone5_socdk
+define KTYPE standard
+define KARCH arm
+
+include ktypes/standard/standard.scc
+
+include bsp/common/cyclone5_arria5.scc
+
+include features/altera/cyclone5-ip.scc
+
+# Common board drivers
+include features/altera/board-common.scc
+
+
