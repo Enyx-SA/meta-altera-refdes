@@ -1,0 +1,13 @@
+define KMACHINE atlas_socdk
+define KTYPE standard
+define KARCH arm
+
+include bsp/include/cyclone5_arria5_arria10.scc
+
+# Atlas Specific patches
+# Add dts
+patch patches/atlas_socdk/0001-Add-Atlas-SoCDK-devicetree.patch
+
+# Atlas configs
+include features/atlas_socdk.scc
+
