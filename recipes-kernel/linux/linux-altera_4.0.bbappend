@@ -1,4 +1,4 @@
-PR = "r5"
+PR = "r6"
 FILESEXTRAPATHS_prepend := "${THISDIR}/config:"
 SRC_URI_append += " \
 			file://${KBRANCH};type=kmeta;destsuffix=${KBRANCH} \
