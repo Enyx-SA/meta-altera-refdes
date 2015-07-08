@@ -3,7 +3,7 @@ DESCRIPTION = "Atlas SoC scripts to start usb gadget for usb mass storage, ether
 AUTHOR = "Dalon Westergreen <dwesterg@gmail.com>"
 SECTION = "atlas-soc"
 
-PR = "r1"
+PR = "r3"
 
 inherit systemd
 
