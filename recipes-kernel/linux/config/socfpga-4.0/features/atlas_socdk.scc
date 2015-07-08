@@ -1,7 +1,0 @@
-define KFEATURE_DESCRIPTION "Atlas SoC Support"
-define KFEATURE_COMPATIBILITY board
-
-kconfig hardware cfg/gpio-keys.cfg
-kconfig hardware cfg/input_misc.cfg
-kconfig hardware cfg/leds.cfg
-kconfig hardware cfg/usb_gadget.cfg
