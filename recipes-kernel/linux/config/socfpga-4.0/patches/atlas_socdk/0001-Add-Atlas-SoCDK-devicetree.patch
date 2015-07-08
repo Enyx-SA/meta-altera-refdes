@@ -1,21 +1,21 @@
-From 1ee95544b04105cf9b700d9226adbf733a1d2fb8 Mon Sep 17 00:00:00 2001
+From b00824ab6179bb3f0984c359c09aface4a61074c Mon Sep 17 00:00:00 2001
 From: Dalon Westergreen <dwesterg@gmail.com>
-Date: Wed, 8 Jul 2015 14:04:03 -0700
-Subject: [PATCH] Add Atlas SoCDK devicetree
+Date: Wed, 8 Jul 2015 16:48:49 -0700
+Subject: [PATCH] Add Atlas SoC devicetree
 
 ---
- arch/arm/boot/dts/socfpga_cyclone5_atlas_socdk.dts | 110 ++++++++++
+ arch/arm/boot/dts/socfpga_cyclone5_atlas_socdk.dts | 119 +++++++++++
  .../dts/socfpga_cyclone5_atlas_socdk_fpga.dtsi     | 225 +++++++++++++++++++++
- 2 files changed, 335 insertions(+)
+ 2 files changed, 344 insertions(+)
  create mode 100644 arch/arm/boot/dts/socfpga_cyclone5_atlas_socdk.dts
  create mode 100644 arch/arm/boot/dts/socfpga_cyclone5_atlas_socdk_fpga.dtsi
 
 diff --git a/arch/arm/boot/dts/socfpga_cyclone5_atlas_socdk.dts b/arch/arm/boot/dts/socfpga_cyclone5_atlas_socdk.dts
 new file mode 100644
-index 0000000..d12305a
+index 0000000..c90b0a1
 --- /dev/null
 +++ b/arch/arm/boot/dts/socfpga_cyclone5_atlas_socdk.dts
-@@ -0,0 +1,110 @@
+@@ -0,0 +1,119 @@
 +/*
 + * Copyright Altera Corporation (C) 2012,2014. All rights reserved.
 + *
@@ -40,7 +40,7 @@ index 0000000..d12305a
 +	compatible = "altr,socfpga-cyclone5", "altr,socfpga";
 +
 +	chosen {
-+		bootargs = "console=ttyS0,115200";
++		bootargs = "console=ttyS0,115200 root=/dev/mmcblk0p2 rw rootwait";
 +	};
 +
 +	memory {
@@ -67,7 +67,7 @@ index 0000000..d12305a
 +			compatible = "gpio-leds";
 +			hps0 {
 +				label = "hps_led0";
-+				gpios = <&gpio1 24 1>;
++				gpios = <&portb 24 0>;
 +				linux,default-trigger = "heartbeat";
 +			};
 +	};
@@ -108,13 +108,12 @@ index 0000000..d12305a
 +		compatible = "adxl34x";
 +		reg = <0x53>;
 +		interrupt-parent = <&intc>;
-+		interrupts = <46 2 4>;
++		interrupts = <0 46 4>;
 +	};
 +	
 +};
 +
 +&mmc0 {
-+	cd-gpios = <&portb 18 0>;
 +	vmmc-supply = <&regulator_3_3v>;
 +	vqmmc-supply = <&regulator_3_3v>;
 +};
@@ -125,6 +124,16 @@ index 0000000..d12305a
 +
 +&usb1 {
 +	status = "okay";
++};
++
++&hps_fpgabridge0 {
++	init-val = <0x1>;
++};
++&hps_fpgabridge1 {
++	init-val = <0x1>;
++};
++&hps_fpgabridge2 {
++	init-val = <0x1>;
 +};
 diff --git a/arch/arm/boot/dts/socfpga_cyclone5_atlas_socdk_fpga.dtsi b/arch/arm/boot/dts/socfpga_cyclone5_atlas_socdk_fpga.dtsi
 new file mode 100644
