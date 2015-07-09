@@ -1,23 +1,23 @@
-From a079fc19527d03ee0ecee10706d1278a8cb3a5b2 Mon Sep 17 00:00:00 2001
+From b00824ab6179bb3f0984c359c09aface4a61074c Mon Sep 17 00:00:00 2001
 From: Dalon Westergreen <dwesterg@gmail.com>
-Date: Wed, 13 May 2015 08:26:54 -0700
-Subject: [PATCH] Add atlas dts
+Date: Wed, 8 Jul 2015 16:48:49 -0700
+Subject: [PATCH] Add Atlas SoC devicetree
 
 ---
- arch/arm/boot/dts/socfpga_cyclone5_atlas_socdk.dts | 126 ++++++++++++
+ arch/arm/boot/dts/socfpga_cyclone5_atlas_socdk.dts | 119 +++++++++++
  .../dts/socfpga_cyclone5_atlas_socdk_fpga.dtsi     | 225 +++++++++++++++++++++
- 2 files changed, 351 insertions(+)
+ 2 files changed, 344 insertions(+)
  create mode 100644 arch/arm/boot/dts/socfpga_cyclone5_atlas_socdk.dts
  create mode 100644 arch/arm/boot/dts/socfpga_cyclone5_atlas_socdk_fpga.dtsi
 
 diff --git a/arch/arm/boot/dts/socfpga_cyclone5_atlas_socdk.dts b/arch/arm/boot/dts/socfpga_cyclone5_atlas_socdk.dts
 new file mode 100644
-index 0000000..9d811c2
+index 0000000..c90b0a1
 --- /dev/null
 +++ b/arch/arm/boot/dts/socfpga_cyclone5_atlas_socdk.dts
-@@ -0,0 +1,126 @@
+@@ -0,0 +1,119 @@
 +/*
-+ * Copyright Altera Corporation (C) 2014. All rights reserved.
++ * Copyright Altera Corporation (C) 2012,2014. All rights reserved.
 + *
 + * This program is free software; you can redistribute it and/or modify
 + * it under the terms and conditions of the GNU General Public License,
@@ -32,9 +32,8 @@ index 0000000..9d811c2
 + * this program.  If not, see <http://www.gnu.org/licenses/>.
 + */
 +
-+/dts-v1/;
-+/include/ "socfpga.dtsi"
-+/include/ "socfpga_cyclone5_atlas_socdk_fpga.dtsi"
++#include "socfpga_cyclone5.dtsi"
++#include "socfpga_cyclone5_atlas_socdk_fpga.dtsi"
 +
 +/ {
 +	model = "Atlas-SoC Cyclone V GHRD";
@@ -47,7 +46,7 @@ index 0000000..9d811c2
 +	memory {
 +		name = "memory";
 +		device_type = "memory";
-+		reg = <0x0 0x80000000>; 
++		reg = <0x0 0x40000000>; /* 1GB */
 +	};
 +
 +	aliases {
@@ -57,94 +56,88 @@ index 0000000..9d811c2
 +		ethernet0 = &gmac1;
 +	};
 +
-+	soc {
-+		
-+		clkmgr@ffd04000 {
-+			clocks {
-+				osc1 {
-+					clock-frequency = <25000000>;
-+				};
-+				osc2 {
-+					clock-frequency = <25000000>;
-+				};
-+			};
-+		};
++	regulator_3_3v: 3-3-v-regulator {
++		compatible = "regulator-fixed";
++		regulator-name = "3.3V";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++	};
 +
-+		dwmmc0@ff704000 {
-+			num-slots = <1>;
-+			supports-highspeed;
-+			broken-cd;
-+			altr,dw-mshc-ciu-div = <3>;
-+			altr,dw-mshc-sdr-timing = <0 3>;
-+
-+			slot@0 {
-+				reg = <0>;
-+				bus-width = <4>;
-+			};
-+		};
-+
-+		ethernet@ff702000 {
-+			phy-mode = "rgmii";
-+			phy-addr = <0xffffffff>; /* probe for phy addr */
-+			status = "okay";
-+		};
-+
-+		gpio@ff708000 {
-+			status = "okay";
-+		};
-+
-+		gpio@ff709000 {
-+			status = "okay";
-+		};
-+
-+		gpio@ff70a000 {
-+			status = "okay";
-+		};
-+
-+		i2c0: i2c@ffc04000 {
-+			speed-mode = <0>;
-+			status = "okay";
-+			
-+			adxl345: adxl345@0 {
-+				#interrupt-cells = <2>;
-+				compatible = "adi,adxl34x";
-+				reg = <83>;
-+				interrupt-controller;
-+				interrupt-parent = <&gpio2>;
-+				interrupts = <2 0x4>;
-+			};
-+		};
-+
-+		serial0@ffc02000 {
-+			status = "okay";
-+		};
-+
-+		sysmgr@ffd08000 {
-+			cpu1-start-addr = <0xffd080c4>;
-+		};
-+
-+		usb1: usb@ffb40000 {
-+			status = "okay";
-+		};
-+
-+		watchdog0: wd@ffd02000 {
-+			status = "okay";
-+		};
-+		
-+		leds {
++	leds {
 +			compatible = "gpio-leds";
 +			hps0 {
 +				label = "hps_led0";
-+				gpios = <&gpio1 24 1>;
++				gpios = <&portb 24 0>;
 +				linux,default-trigger = "heartbeat";
 +			};
-+
-+		};
 +	};
++};
++
++&gmac1 {
++	status = "okay";
++	phy-mode = "rgmii";
++
++	rxd0-skew-ps = <0>;
++	rxd1-skew-ps = <0>;
++	rxd2-skew-ps = <0>;
++	rxd3-skew-ps = <0>;
++	txen-skew-ps = <0>;
++	txc-skew-ps = <2600>;
++	rxdv-skew-ps = <0>;
++	rxc-skew-ps = <2000>;
++	max-frame-size = <3800>;
++};
++
++&gpio0 {
++	status = "okay";
++};
++
++&gpio1 {
++	status = "okay";
++};
++
++&gpio2 {
++	status = "okay";
++};
++
++&i2c0 {
++	status = "okay";
++	speed-mode = <0>;
++
++	adxl345: adxl345@0 {
++		compatible = "adxl34x";
++		reg = <0x53>;
++		interrupt-parent = <&intc>;
++		interrupts = <0 46 4>;
++	};
++	
++};
++
++&mmc0 {
++	vmmc-supply = <&regulator_3_3v>;
++	vqmmc-supply = <&regulator_3_3v>;
++};
++
++&uart0 {
++	status = "okay";
++};
++
++&usb1 {
++	status = "okay";
++};
++
++&hps_fpgabridge0 {
++	init-val = <0x1>;
++};
++&hps_fpgabridge1 {
++	init-val = <0x1>;
++};
++&hps_fpgabridge2 {
++	init-val = <0x1>;
 +};
 diff --git a/arch/arm/boot/dts/socfpga_cyclone5_atlas_socdk_fpga.dtsi b/arch/arm/boot/dts/socfpga_cyclone5_atlas_socdk_fpga.dtsi
 new file mode 100644
-index 0000000..fb390f3
+index 0000000..b91288c
 --- /dev/null
 +++ b/arch/arm/boot/dts/socfpga_cyclone5_atlas_socdk_fpga.dtsi
 @@ -0,0 +1,225 @@
@@ -251,7 +244,7 @@ index 0000000..fb390f3
 +				reg = <0x00000001 0x00005000 0x00000010>;
 +				interrupts = <0 42 1>;
 +				clocks = <&clk_0>;
-+				altr,gpio-bank-width = <4>;
++				altr,gpio-bank-width = <2>;
 +				altr,interrupt_type = <2>;
 +				edge_type = <1>;
 +				level_trigger = <0>;
@@ -299,42 +292,42 @@ index 0000000..fb390f3
 +
 +			led_fpga0: fpga0 {
 +				label = "fpga_led0";
-+				gpios = <&led_pio 0 1>;
++				gpios = <&led_pio 0 0>;
 +			}; //end fpga0 (led_fpga0)
 +
 +			led_fpga1: fpga1 {
 +				label = "fpga_led1";
-+				gpios = <&led_pio 1 1>;
++				gpios = <&led_pio 1 0>;
 +			}; //end fpga1 (led_fpga1)
 +
 +			led_fpga2: fpga2 {
 +				label = "fpga_led2";
-+				gpios = <&led_pio 2 1>;
++				gpios = <&led_pio 2 0>;
 +			}; //end fpga2 (led_fpga2)
 +
 +			led_fpga3: fpga3 {
 +				label = "fpga_led3";
-+				gpios = <&led_pio 3 1>;
++				gpios = <&led_pio 3 0>;
 +			}; //end fpga3 (led_fpga3)
 +
 +			led_fpga4: fpga4 {
 +				label = "fpga_led4";
-+				gpios = <&led_pio 4 1>;
++				gpios = <&led_pio 4 0>;
 +			}; //end fpga4 (led_fpga4)
 +
 +			led_fpga5: fpga5 {
 +				label = "fpga_led5";
-+				gpios = <&led_pio 5 1>;
++				gpios = <&led_pio 5 0>;
 +			}; //end fpga5 (led_fpga5)
 +
 +			led_fpga6: fpga6 {
 +				label = "fpga_led6";
-+				gpios = <&led_pio 6 1>;
++				gpios = <&led_pio 6 0>;
 +			}; //end fpga6 (led_fpga6)
 +
 +			led_fpga7: fpga7 {
 +				label = "fpga_led7";
-+				gpios = <&led_pio 7 1>;
++				gpios = <&led_pio 7 0>;
 +			}; //end fpga7 (led_fpga7)
 +
 +

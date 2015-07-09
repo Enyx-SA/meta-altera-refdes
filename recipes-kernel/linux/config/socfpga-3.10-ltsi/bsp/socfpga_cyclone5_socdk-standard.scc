@@ -1,0 +1,9 @@
+define KMACHINE socfpga_cyclone5_socdk
+define KTYPE standard
+define KARCH arm
+
+include bsp/include/cyclone5_arria5_arria10.scc
+
+# Patch 3.10 LTSI Kernel to fix USB issue
+patch patches/0001-fix_usbnet_large_transfers_v_3_10_ltsi.patch
+
