@@ -39,10 +39,8 @@ int main(void) {
 			error(1, 0, "path length overflow");
 
 		led_fd = open(path, O_WRONLY | O_SYNC);
-		if(led_fd < 0) {
-			error(1, errno, "could not open file '%s'",
-					path);
-		}
+		if(led_fd < 0)
+			error(1, errno, "could not open file '%s'", path);
 
 		result = write(led_fd, "none", 4);
 		if(result < 0)
@@ -64,10 +62,8 @@ int main(void) {
 			error(1, 0, "path length overflow");
 
 		led_fd = open(path, O_WRONLY | O_SYNC);
-		if(led_fd < 0) {
-			error(1, errno, "could not open file '%s'",
-					path);
-		}
+		if(led_fd < 0)
+			error(1, errno, "could not open file '%s'", path);
 
 		result = write(led_fd, "0", 1);
 		if(result < 0)
@@ -75,10 +71,8 @@ int main(void) {
 		if(result != 1)
 	
 		led_fd = open(path, O_WRONLY | O_SYNC);
-		if(led_fd < 0) {
-			error(1, errno, "could not open file '%s'",
-					path);
-		}
+		if(led_fd < 0)
+			error(1, errno, "could not open file '%s'", path);
 
 		result = write(led_fd, "0", 1);
 		if(result < 0)
@@ -103,10 +97,8 @@ int main(void) {
 			error(1, 0, "path length overflow");
 
 		led_fd = open(path, O_RDWR | O_SYNC);
-		if(led_fd < 0) {
-			error(1, errno, "could not open file '%s'",
-					path);
-		}
+		if(led_fd < 0)
+			error(1, errno, "could not open file '%s'", path);
 
 		result = read(led_fd, &brightness, 1);
 		if(result < 0)
