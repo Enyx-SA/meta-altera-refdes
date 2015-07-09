@@ -25,7 +25,7 @@ IMAGE_INSTALL += " \
 	atlas-soc-fftdriver-mod \
 	atlas-soc-fftsw-apps \
 	atlas-soc-fftsw-apps-src \
-	atlas-soc-led-apps \
+	atlas-soc-gpio-apps \
 	gnuplot \
 	cmake \
 "
