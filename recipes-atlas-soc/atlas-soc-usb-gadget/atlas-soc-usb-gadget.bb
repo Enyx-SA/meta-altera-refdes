@@ -3,7 +3,7 @@ DESCRIPTION = "Atlas SoC scripts to start usb gadget for usb mass storage, ether
 AUTHOR = "Dalon Westergreen <dwesterg@gmail.com>"
 SECTION = "atlas-soc"
 
-PR = "r3"
+PR = "r4"
 
 inherit systemd
 
@@ -15,6 +15,7 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 SRC_URI = "file://atlassoc-gadget-init.service \
            file://udhcpd.conf \
            file://g-ether-load.sh \
+           file://fat_image.img.tgz \
           "
 
 do_install() {
@@ -29,6 +30,9 @@ do_install() {
 
 	install -d ${D}${sysconfdir}/systemd/system/getty.target.wants
 	( cd ${D}${sysconfdir}/systemd/system/getty.target.wants && ln -s /lib/systemd/system/serial-getty@.service serial-getty@ttyGS0.service )
+
+	install -d ${D}${datadir}/${PN}
+	tar -xzvf ${S}/fat_image.img.tgz -C ${D}${datadir}/${PN}
 }
 
 PACKAGES =+ "${PN}-network ${PN}-udhcpd"
@@ -40,7 +44,8 @@ FILES_${PN} = "${base_libdir}/systemd/system/atlassoc-gadget-init.service \
               "
 
 FILES_${PN}-network = "${base_libdir}/systemd/system/network-gadget-init.service \
-                       ${bindir}/g-ether-load.sh"
+                       ${bindir}/g-ether-load.sh \
+		       ${datadir}/${PN}"
 
 FILES_${PN}-udhcpd = "${sysconfdir}/udhcpd.conf"
 

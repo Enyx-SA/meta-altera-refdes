@@ -1,6 +1,6 @@
 #!/bin/sh
 
-modprobe g_multi file=/dev/mmcblk0p1 cdrom=0 stall=0 removable=0 nofua=1 host_addr="00:07:ed:01:02:03"
+modprobe g_multi file=/usr/share/atlas-soc-usb-gadget/fat_image.img
 
 sleep 5
 
