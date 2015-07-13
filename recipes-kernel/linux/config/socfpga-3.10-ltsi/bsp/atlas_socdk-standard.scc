@@ -8,9 +8,6 @@ include bsp/include/cyclone5_arria5_arria10.scc
 # Add dts
 patch patches/atlas_socdk/0001-Add-atlas_socdk-devicetree.patch
 
-# Patch 3.10 LTSI Kernel to fix USB issue
-patch patches/0001-fix_usbnet_large_transfers_v_3_10_ltsi.patch
-
 # Atlas configs
 include features/atlas_socdk.scc
 
