@@ -8,6 +8,9 @@ include bsp/include/cyclone5_arria5_arria10.scc
 # Add dts
 patch patches/atlas_socdk/0001-Add-Atlas-SoCDK-devicetree.patch
 
+# Add patch to fix bug in altera-gpio driver
+oatch patches/0001-altera_gpio_get-bit-mask-error-in-gpio-altera.c.patch
+
 # Atlas configs
 include features/atlas_socdk.scc
 
