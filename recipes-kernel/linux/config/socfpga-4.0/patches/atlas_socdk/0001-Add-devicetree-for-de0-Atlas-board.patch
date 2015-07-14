@@ -102,7 +102,7 @@ index 0000000..ef6d540
 +       speed-mode = <0>;
 +
 +       adxl345: adxl345@0 {
-+               compatible = "adxl345";
++               compatible = "adxl34x";
 +               reg = <0x53>;
 +
 +               interrupt-parent = <&portc>;
