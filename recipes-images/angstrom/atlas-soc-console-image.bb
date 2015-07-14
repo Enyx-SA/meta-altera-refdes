@@ -26,6 +26,7 @@ IMAGE_INSTALL += " \
 	atlas-soc-fftsw-apps \
 	atlas-soc-fftsw-apps-src \
 	atlas-soc-gpio-apps \
+	atlas-soc-adxl-apps \
 	gnuplot \
 	cmake \
 "
