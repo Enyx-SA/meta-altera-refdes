@@ -14,14 +14,14 @@ tree maintained by the kernel in the procfs.
 # find gpio-leds in device tree
 ################################################################################
 function find_gpio_leds_dt () {
-for NEXT in $(find /proc/device-tree -name "compatible" | sort)
+for NEXT in $(find -L /proc/device-tree -name "compatible" | sort)
 do
 cat ${NEXT} | grep -xz "gpio-leds" > /dev/null && {
 LEDS_DIRNAME="$(dirname ${NEXT})"
 LEDS_COMPATIBLE="$(cat ${LEDS_DIRNAME}/compatible)"
 echo "${LEDS_DIRNAME}"
 echo -e "\tcompatible = '${LEDS_COMPATIBLE}'"
-for NEXT_LED in $(find "${LEDS_DIRNAME}" -name "gpios" | sort)
+for NEXT_LED in $(find -L "${LEDS_DIRNAME}" -name "gpios" | sort)
 do
 NEXT_LED_DIR="$(dirname ${NEXT_LED})"
 echo "${NEXT_LED_DIR}"
@@ -34,7 +34,7 @@ printf "             gpios = ('%d', '%d', '%d') : ('%s', '%s', '%s')\n" \
 "controller" "bit" "flag"
 GPIO_CONTROLLER="unknown"
 CONTROLLER_PHANDLE_DEC="$(printf "%d" "${CONTROLLER_PHANDLE_HEX}")"
-for NEXT in $(find /proc/device-tree -name "phandle" | sort)
+for NEXT in $(find -L /proc/device-tree -name "phandle" | sort)
 do
 PHANDLE_HEX="$(hexdump -v -e '"0x" 4/1 "%02x"' "${NEXT}")"
 PHANDLE_DEC="$(printf "%d" "${PHANDLE_HEX}")"
@@ -54,36 +54,38 @@ containing the 'compatible' string 'gpio-leds', there should be only one node
 located.  The function then prints the path to the node that it found and 
 extracts the 'gpios' binding for each led node and prints these statistics.
 
-root@cyclone5:~# find_gpio_leds_dt
+root@atlas_socdk:~# find_gpio_leds_dt
+/proc/device-tree/leds
+        compatible = 'gpio-leds'
+/proc/device-tree/leds/hps0
+             gpios = ('51', '24', '0') : ('controller', 'bit', 'flag')
+        controller = '/proc/device-tree/soc/gpio@ff709000/gpio-controller@0'
 /proc/device-tree/soc/leds
         compatible = 'gpio-leds'
 /proc/device-tree/soc/leds/fpga0
-             gpios = ('43', '0', '0') : ('controller', 'bit', 'flag')
+             gpios = ('49', '0', '0') : ('controller', 'bit', 'flag')
         controller = '/proc/device-tree/soc/bridge@0xc0000000/gpio@0x100003000'
 /proc/device-tree/soc/leds/fpga1
-             gpios = ('43', '1', '0') : ('controller', 'bit', 'flag')
+             gpios = ('49', '1', '0') : ('controller', 'bit', 'flag')
         controller = '/proc/device-tree/soc/bridge@0xc0000000/gpio@0x100003000'
 /proc/device-tree/soc/leds/fpga2
-             gpios = ('43', '2', '0') : ('controller', 'bit', 'flag')
+             gpios = ('49', '2', '0') : ('controller', 'bit', 'flag')
         controller = '/proc/device-tree/soc/bridge@0xc0000000/gpio@0x100003000'
 /proc/device-tree/soc/leds/fpga3
-             gpios = ('43', '3', '0') : ('controller', 'bit', 'flag')
+             gpios = ('49', '3', '0') : ('controller', 'bit', 'flag')
         controller = '/proc/device-tree/soc/bridge@0xc0000000/gpio@0x100003000'
 /proc/device-tree/soc/leds/fpga4
-             gpios = ('43', '4', '0') : ('controller', 'bit', 'flag')
+             gpios = ('49', '4', '0') : ('controller', 'bit', 'flag')
         controller = '/proc/device-tree/soc/bridge@0xc0000000/gpio@0x100003000'
 /proc/device-tree/soc/leds/fpga5
-             gpios = ('43', '5', '0') : ('controller', 'bit', 'flag')
+             gpios = ('49', '5', '0') : ('controller', 'bit', 'flag')
         controller = '/proc/device-tree/soc/bridge@0xc0000000/gpio@0x100003000'
 /proc/device-tree/soc/leds/fpga6
-             gpios = ('43', '6', '0') : ('controller', 'bit', 'flag')
+             gpios = ('49', '6', '0') : ('controller', 'bit', 'flag')
         controller = '/proc/device-tree/soc/bridge@0xc0000000/gpio@0x100003000'
 /proc/device-tree/soc/leds/fpga7
-             gpios = ('43', '7', '0') : ('controller', 'bit', 'flag')
+             gpios = ('49', '7', '0') : ('controller', 'bit', 'flag')
         controller = '/proc/device-tree/soc/bridge@0xc0000000/gpio@0x100003000'
-/proc/device-tree/soc/leds/hps0
-             gpios = ('44', '24', '0') : ('controller', 'bit', 'flag')
-        controller = '/proc/device-tree/soc/gpio@ff709000/gpio-controller@0'
 
 For more information on the gpio controllers framework, please read the
 README_gpio.txt document.  The 'gpio@0x100003000' controller identified above
@@ -99,17 +101,17 @@ The gpio-led framework will register sysfs entries for each led port, and
 provide files that we can use to control and query the state of the leds.  If we
 look at the sysfs led class directory like this:
 
-root@cyclone5:~# ls /sys/class/leds/
+root@atlas_socdk:~# ls /sys/class/leds/
 fpga_led0  fpga_led2  fpga_led4  fpga_led6  hps_led0
 fpga_led1  fpga_led3  fpga_led5  fpga_led7
 
 We see all the led entries that the gpio-leds framework has registered for us.
 Each of these directories contain the following format:
 
-root@cyclone5:~# ls /sys/class/leds/fpga_led0
+root@atlas_socdk:~# ls /sys/class/leds/fpga_led0
 brightness      max_brightness  subsystem       uevent
 device          power           trigger
-root@cyclone5:~# ls /sys/class/leds/hps_led0
+root@atlas_socdk:~# ls /sys/class/leds/hps_led0
 brightness      max_brightness  subsystem       uevent
 device          power           trigger
 
@@ -119,33 +121,33 @@ automatic triggers get applied to the led port, by default the 'hps_led0' port
 is assigned to be triggered as 'heartbeat' and if we examine the 'trigger' file
 we should see that:
 
-root@cyclone5:~# cat /sys/class/leds/hps_led0/trigger
+root@atlas_socdk:~# cat /sys/class/leds/hps_led0/trigger
 none nand-disk mmc0 timer oneshot [heartbeat] backlight gpio cpu0 cpu1 default-on
 
 If we look at any of the 'fpga_led*' entiries we should see no trigger applied
 to them;
 
-root@cyclone5:~# cat /sys/class/leds/fpga_led0/trigger
+root@atlas_socdk:~# cat /sys/class/leds/fpga_led0/trigger
 [none] nand-disk mmc0 timer oneshot heartbeat backlight gpio cpu0 cpu1 default-on
 
 The 'brightness' file allows us to turn the led on or off and query the state of
 the led.  Like this
 
-root@cyclone5:~# cat /sys/class/leds/fpga_led0/brightness
+root@atlas_socdk:~# cat /sys/class/leds/fpga_led0/brightness
 0
 
 The 'fpga_led0' port is currently off, so if we set this port to anything but
 zero, we will turn that led on, like this:
 
-root@cyclone5:~# echo 1 > /sys/class/leds/fpga_led0/brightness
-root@cyclone5:~# cat /sys/class/leds/fpga_led0/brightness
+root@atlas_socdk:~# echo 1 > /sys/class/leds/fpga_led0/brightness
+root@atlas_socdk:~# cat /sys/class/leds/fpga_led0/brightness
 1
 
 Now the 'fpga_led0' port is on, if we sest this port back to zero the we will
 turn that led off, like this:
 
-root@cyclone5:~# echo 0 > /sys/class/leds/fpga_led0/brightness
-root@cyclone5:~# cat /sys/class/leds/fpga_led0/brightness
+root@atlas_socdk:~# echo 0 > /sys/class/leds/fpga_led0/brightness
+root@atlas_socdk:~# cat /sys/class/leds/fpga_led0/brightness
 0
 
 --------------------------------------------------------------------------------

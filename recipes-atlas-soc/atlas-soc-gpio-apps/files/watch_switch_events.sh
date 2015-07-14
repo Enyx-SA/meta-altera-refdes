@@ -1,7 +1,7 @@
 #$/bin/sh
 
 #open the input event device for our gpio-keys
-exec 7<>/dev/input/by-path/platform-keys.8-event
+exec 7<>/dev/input/by-path/platform-soc:keys-event
 
 # start a subshell with the output from the device file as its input
 (

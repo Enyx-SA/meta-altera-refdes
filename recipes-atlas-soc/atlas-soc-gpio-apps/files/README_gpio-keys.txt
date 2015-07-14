@@ -19,14 +19,14 @@ tree maintained by the kernel in the procfs.
 # find gpio-keys in device tree
 ################################################################################
 function find_gpio_keys_dt () {
-for NEXT in $(find /proc/device-tree -name "compatible" | sort)
+for NEXT in $(find -L /proc/device-tree -name "compatible" | sort)
 do
 cat ${NEXT} | grep -xz "gpio-keys" > /dev/null && {
 KEYS_DIRNAME="$(dirname ${NEXT})"
 KEYS_COMPATIBLE="$(cat ${KEYS_DIRNAME}/compatible)"
 echo "${KEYS_DIRNAME}"
 echo -e "\tcompatible = '${KEYS_COMPATIBLE}'"
-for NEXT_KEY in $(find "${KEYS_DIRNAME}" -name "gpios" | sort)
+for NEXT_KEY in $(find -L "${KEYS_DIRNAME}" -name "gpios" | sort)
 do
 NEXT_KEY_DIR="$(dirname ${NEXT_KEY})"
 echo "${NEXT_KEY_DIR}"
@@ -41,7 +41,7 @@ KEYS_CODE="$(hexdump -v -e '"0x" 4/1 "%02x"' "${NEXT_KEY_DIR}/linux,code")"
 printf "              code = '%d'\n" "${KEYS_CODE}"
 GPIO_CONTROLLER="unknown"
 CONTROLLER_PHANDLE_DEC="$(printf "%d" "${CONTROLLER_PHANDLE_HEX}")"
-for NEXT in $(find /proc/device-tree -name "phandle" | sort)
+for NEXT in $(find -L /proc/device-tree -name "phandle" | sort)
 do
 PHANDLE_HEX="$(hexdump -v -e '"0x" 4/1 "%02x"' "${NEXT}")"
 PHANDLE_DEC="$(printf "%d" "${PHANDLE_HEX}")"
@@ -62,25 +62,26 @@ located.  The function then prints the path to the node that it found and
 extracts the 'gpios' binding and the 'linux,code' binding for each key node and
 prints these statistics.
 
-root@cyclone5:~# find_gpio_keys_dt
+root@atlas_socdk:~# find_gpio_keys_dt
 /proc/device-tree/soc/keys
         compatible = 'gpio-keys'
 /proc/device-tree/soc/keys/sw0
-             gpios = ('45', '0', '1') : ('controller', 'bit', 'flag')
+             gpios = ('50', '0', '1') : ('controller', 'bit', 'flag')
               code = '64'
         controller = '/proc/device-tree/soc/bridge@0xc0000000/gpio@0x100004000'
 /proc/device-tree/soc/keys/sw1
-             gpios = ('45', '1', '1') : ('controller', 'bit', 'flag')
+             gpios = ('50', '1', '1') : ('controller', 'bit', 'flag')
               code = '65'
         controller = '/proc/device-tree/soc/bridge@0xc0000000/gpio@0x100004000'
 /proc/device-tree/soc/keys/sw2
-             gpios = ('45', '2', '1') : ('controller', 'bit', 'flag')
+             gpios = ('50', '2', '1') : ('controller', 'bit', 'flag')
               code = '66'
         controller = '/proc/device-tree/soc/bridge@0xc0000000/gpio@0x100004000'
 /proc/device-tree/soc/keys/sw3
-             gpios = ('45', '3', '1') : ('controller', 'bit', 'flag')
+             gpios = ('50', '3', '1') : ('controller', 'bit', 'flag')
               code = '67'
         controller = '/proc/device-tree/soc/bridge@0xc0000000/gpio@0x100004000'
+root@atlas_socdk:~#
 
 For more information on the gpio controllers framework, please read the
 README_gpio.txt document.  The 'gpio@0x100004000' controller identified above
@@ -93,76 +94,80 @@ events when the gpios above change their state.  The 'code' associated with each
 gpio above will be encoded in the input event message along with the state of
 the switch.  We can see the input device in the devfs like this:
 
-root@cyclone5:~# ls -lR /dev/input
+root@atlas_socdk:~# ls -lR /dev/input
 /dev/input:
 total 0
-drwxr-xr-x    2 root     root            80 Jan  1  1970 by-path
+drwxr-xr-x    2 root     root            80 Jul  9 16:25 by-path
 crw-rw----    1 root     input      13,  64 Jan  1  1970 event0
-crw-rw----    1 root     input      13,  65 Jan  1  1970 event1
+crw-rw----    1 root     input      13,  65 Jul  9 16:25 event1
 crw-rw----    1 root     input      13,  63 Jan  1  1970 mice
 crw-rw----    1 root     input      13,  32 Jan  1  1970 mouse0
 
 /dev/input/by-path:
 total 0
 lrwxrwxrwx    1 root     root             9 Jan  1  1970 platform-ffc04000.i2c-event -> ../event0
-lrwxrwxrwx    1 root     root             9 Jan  1  1970 platform-keys.8-event -> ../event1
+lrwxrwxrwx    1 root     root             9 Jul  9 16:25 platform-soc:keys-event -> ../event1
 
 In this case the event1 device is the device for our gpio-keys input, we can
 tell this from the '/dev/input/by-path' links that have more descriptive names.
 
 The sysfs also describes the input device environment for us in a useful way.
 
-root@cyclone5:~# ls -l /sys/class/input/
+root@atlas_socdk:~# ls -l /sys/class/input/
 total 0
-lrwxrwxrwx    1 root     root             0 Jan  1  1970 event0 -> ../../devices/soc.0/ffc04000.i2c/i2c-0/0-0053/input/input0/event0
-lrwxrwxrwx    1 root     root             0 Jul  8 01:35 event1 -> ../../devices/soc.0/keys.8/input/input1/event1
-lrwxrwxrwx    1 root     root             0 Jan  1  1970 input0 -> ../../devices/soc.0/ffc04000.i2c/i2c-0/0-0053/input/input0
-lrwxrwxrwx    1 root     root             0 Jul  8 01:35 input1 -> ../../devices/soc.0/keys.8/input/input1
+lrwxrwxrwx    1 root     root             0 Jan  1  1970 event0 -> ../../devices/platform/soc/ffc04000.i2c/i2c-0/0-0053/input/input0/event0
+lrwxrwxrwx    1 root     root             0 Jul 14 19:17 event1 -> ../../devices/platform/soc/soc:keys/input/input1/event1
+lrwxrwxrwx    1 root     root             0 Jan  1  1970 input0 -> ../../devices/platform/soc/ffc04000.i2c/i2c-0/0-0053/input/input0
+lrwxrwxrwx    1 root     root             0 Jul 14 19:17 input1 -> ../../devices/platform/soc/soc:keys/input/input1
 lrwxrwxrwx    1 root     root             0 Jan  1  1970 mice -> ../../devices/virtual/input/mice
-lrwxrwxrwx    1 root     root             0 Jan  1  1970 mouse0 -> ../../devices/soc.0/ffc04000.i2c/i2c-0/0-0053/input/input0/mouse0
+lrwxrwxrwx    1 root     root             0 Jan  1  1970 mouse0 -> ../../devices/platform/soc/ffc04000.i2c/i2c-0/0-0053/input/input0/mouse0
 
-And from the above we can see that the 'keys.8' device exists in the sysfs.
+And from the above we can see that the 'soc:keys' device exists in the sysfs.
 
-root@cyclone5:~# ls /sys/devices/soc.0/keys.8
-disabled_keys      input              power              uevent
-disabled_switches  keys               subsystem
-driver             modalias           switches
-root@cyclone5:~# ls /sys/devices/soc.0/keys.8/input/
+root@atlas_socdk:~# ls /sys/devices/platform/soc/soc:keys
+disabled_keys      driver_override    modalias           switches
+disabled_switches  input              power              uevent
+driver             keys               subsystem
+root@atlas_socdk:~# ls /sys/devices/platform/soc/soc:keys/input
 input1
-root@cyclone5:~# ls /sys/devices/soc.0/keys.8/input/input1/
+root@atlas_socdk:~# ls /sys/devices/platform/soc/soc:keys/input/input1
 capabilities  event1        modalias      phys          properties    uevent
 device        id            name          power         subsystem     uniq
-root@cyclone5:~# ls /sys/devices/soc.0/keys.8/input/input1/event1/
+root@atlas_socdk:~# ls /sys/devices/platform/soc/soc:keys/input/input1/event1
 dev        device     power      subsystem  uevent
-root@cyclone5:~# cat /sys/devices/soc.0/keys.8/input/input1/name
-keys.8
+root@atlas_socdk:~# cat /sys/devices/platform/soc/soc:keys/input/input1/name
+soc:keys
+root@atlas_socdk:~# cat /sys/devices/platform/soc/soc:keys/input/input1/event1/dev
+13:65
+root@atlas_socdk:~# ls -l /dev/input/event1
+crw-rw----    1 root     input      13,  65 Jul  9 16:25 /dev/input/event1
 
 So now that we know what our input event device is, we can simply read from it
 to capture the input events as they arrive.  The device will block until the
 next event message is received.  We can do this like so:
 
-root@cyclone5:~# hexdump -C /dev/input/event1
-00000000  cd 80 9c 55 ad 4d 0a 00  01 00 40 00 00 00 00 00  |...U.M....@.....|
-00000010  cd 80 9c 55 ad 4d 0a 00  00 00 00 00 00 00 00 00  |...U.M..........|
-00000020  d1 80 9c 55 5a a8 04 00  01 00 40 00 01 00 00 00  |...UZ.....@.....|
-00000030  d1 80 9c 55 5a a8 04 00  00 00 00 00 00 00 00 00  |...UZ...........|
-00000040  d5 80 9c 55 58 37 02 00  01 00 41 00 00 00 00 00  |...UX7....A.....|
-00000050  d5 80 9c 55 58 37 02 00  00 00 00 00 00 00 00 00  |...UX7..........|
-00000060  d9 80 9c 55 78 67 07 00  01 00 41 00 01 00 00 00  |...Uxg....A.....|
-00000070  d9 80 9c 55 78 67 07 00  00 00 00 00 00 00 00 00  |...Uxg..........|
-00000080  dd 80 9c 55 0b 38 0b 00  01 00 42 00 00 00 00 00  |...U.8....B.....|
-00000090  dd 80 9c 55 0b 38 0b 00  00 00 00 00 00 00 00 00  |...U.8..........|
-000000a0  e0 80 9c 55 88 ac 02 00  01 00 42 00 01 00 00 00  |...U......B.....|
-000000b0  e0 80 9c 55 88 ac 02 00  00 00 00 00 00 00 00 00  |...U............|
-000000c0  e3 80 9c 55 88 70 0c 00  01 00 43 00 00 00 00 00  |...U.p....C.....|
-000000d0  e3 80 9c 55 88 70 0c 00  00 00 00 00 00 00 00 00  |...U.p..........|
-000000e0  e9 80 9c 55 c9 48 03 00  01 00 43 00 01 00 00 00  |...U.H....C.....|
-000000f0  e9 80 9c 55 c9 48 03 00  00 00 00 00 00 00 00 00  |...U.H..........|
+root@atlas_socdk:~# hexdump -C /dev/input/event1
+00000000  ca 61 a5 55 a4 44 08 00  01 00 40 00 00 00 00 00  |.a.U.D....@.....|
+00000010  ca 61 a5 55 a4 44 08 00  00 00 00 00 00 00 00 00  |.a.U.D..........|
+00000020  cc 61 a5 55 24 2a 02 00  01 00 40 00 01 00 00 00  |.a.U$*....@.....|
+00000030  cc 61 a5 55 24 2a 02 00  00 00 00 00 00 00 00 00  |.a.U$*..........|
+00000040  cd 61 a5 55 04 a0 0b 00  01 00 41 00 00 00 00 00  |.a.U......A.....|
+00000050  cd 61 a5 55 04 a0 0b 00  00 00 00 00 00 00 00 00  |.a.U............|
+00000060  cf 61 a5 55 bf 21 06 00  01 00 41 00 01 00 00 00  |.a.U.!....A.....|
+00000070  cf 61 a5 55 bf 21 06 00  00 00 00 00 00 00 00 00  |.a.U.!..........|
+00000080  d1 61 a5 55 7c 14 03 00  01 00 42 00 00 00 00 00  |.a.U|.....B.....|
+00000090  d1 61 a5 55 7c 14 03 00  00 00 00 00 00 00 00 00  |.a.U|...........|
+000000a0  d2 61 a5 55 22 2a 02 00  01 00 42 00 01 00 00 00  |.a.U"*....B.....|
+000000b0  d2 61 a5 55 22 2a 02 00  00 00 00 00 00 00 00 00  |.a.U"*..........|
+000000c0  d4 61 a5 55 8d ac 05 00  01 00 43 00 00 00 00 00  |.a.U......C.....|
+000000d0  d4 61 a5 55 8d ac 05 00  00 00 00 00 00 00 00 00  |.a.U............|
+000000e0  d7 61 a5 55 8c ac 05 00  01 00 43 00 01 00 00 00  |.a.U......C.....|
+000000f0  d7 61 a5 55 8c ac 05 00  00 00 00 00 00 00 00 00  |.a.U............|
 ^C
 
 The output above results after we start hexdump reading from the input event1
-device, and then we toggle SW1 on and off, then we toggle SW2 on and off, then
-we toggle SW3 on and off, and then we toggle SW4 on and off.  In 16 byte event
+device, and then we toggle SW0 on and off, then we toggle SW1 on and off, then
+we toggle SW2 on and off, and then we toggle SW3 on and off.  In 16 byte event
 messages that appear above, we can see the first 4 bytes that represent the
 second of the event, followed by the next 4 bytes that represent the millisecond
 of the event, followed by the next 2 bytes that represent the event type,

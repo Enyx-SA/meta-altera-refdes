@@ -10,7 +10,7 @@
 
 int main(void) {
 	int event_dev_fd;
-	const char *path = "/dev/input/by-path/platform-keys.8-event";
+	const char *path = "/dev/input/by-path/platform-soc:keys-event";
 	struct input_event the_event;
 	int result;
 	unsigned char keys[9];

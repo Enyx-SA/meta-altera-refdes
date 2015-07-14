@@ -16,7 +16,7 @@ tree maintained by the kernel in the procfs.
 # find gpio controllers in device tree
 ################################################################################
 function find_gpio_controllers_dt () {
-for NEXT in $(find /proc/device-tree -name "compatible" | sort)
+for NEXT in $(find -L /proc/device-tree -name "compatible" | sort)
 do
 cat ${NEXT} | grep -xz "snps,dw-apb-gpio" > /dev/null && {
 GPIO_DIRNAME="$(dirname ${NEXT})"
@@ -50,7 +50,7 @@ the node that it found and extracts the compatible string and width of the gpio
 controller and prints those statistics out as well.  It does this for all gpio
 controller nodes that it locates in the device tree.
 
-root@cyclone5:~# find_gpio_controllers_dt
+root@atlas_socdk:~# find_gpio_controllers_dt
 /proc/device-tree/soc/bridge@0xc0000000/gpio@0x100003000
         compatible = 'altr,pio-15.0altr,pio-1.0'
              width = '8'
@@ -69,7 +69,6 @@ root@cyclone5:~# find_gpio_controllers_dt
 /proc/device-tree/soc/gpio@ff70a000
         compatible = 'snps,dw-apb-gpio'
              width = '27'
-root@cyclone5:~#
 
 Now the run time binary device tree blob does not contain some of the useful
 labels that were used in the original DTS source files that can help us
@@ -126,9 +125,9 @@ controllers that we can interact with to gain access to and manipulate the gpio
 ports that we are interested in. These sysfs entries are located in
 '/sys/class/gpio', like this:
 
-root@cyclone5:~# ls /sys/class/gpio
-export       gpiochip159  gpiochip171  gpiochip227
-gpiochip157  gpiochip163  gpiochip198  unexport
+root@atlas_socdk:~# ls /sys/class/gpio
+export       gpiochip415  gpiochip427  gpiochip483
+gpiochip413  gpiochip419  gpiochip454  unexport
 
 Each of the gpio controllers is represented by a gpiochip* entry in the display
 above.  To determine which gpiochip* entry corresponds to which gpio controller
@@ -139,29 +138,28 @@ do
 echo ${NEXT} = $(cat ${NEXT}/label)
 done
 
-/sys/class/gpio/gpiochip157 = /soc/bridge@0xc0000000/gpio@0x100005000
-/sys/class/gpio/gpiochip159 = /soc/bridge@0xc0000000/gpio@0x100004000
-/sys/class/gpio/gpiochip163 = /soc/bridge@0xc0000000/gpio@0x100003000
-/sys/class/gpio/gpiochip171 = ff70a000.gpio
-/sys/class/gpio/gpiochip198 = ff709000.gpio
-/sys/class/gpio/gpiochip227 = ff708000.gpio
+/sys/class/gpio/gpiochip413 = /soc/bridge@0xc0000000/gpio@0x100005000
+/sys/class/gpio/gpiochip415 = /soc/bridge@0xc0000000/gpio@0x100004000
+/sys/class/gpio/gpiochip419 = /soc/bridge@0xc0000000/gpio@0x100003000
+/sys/class/gpio/gpiochip427 = ff70a000.gpio
+/sys/class/gpio/gpiochip454 = ff709000.gpio
+/sys/class/gpio/gpiochip483 = ff708000.gpio
 
-The naming convention for the HPS based gpio controllers is flipped around from
-the entries in the device tree database, but you should be able to correlate
-them just as easily.  We can also extract the width of each gpio controller from
-the sysfs entries like this:
+You should be able to correlate the string from the 'label' file with the output
+that we saw from the device tree entries.  We can also extract the width of each
+gpio controller from the sysfs entries like this:
 
 for NEXT in $(find /sys/class/gpio/ -name "gpiochip*" | sort)
 do
 echo ${NEXT} = $(cat ${NEXT}/ngpio)
 done
 
-/sys/class/gpio/gpiochip157 = 2
-/sys/class/gpio/gpiochip159 = 4
-/sys/class/gpio/gpiochip163 = 8
-/sys/class/gpio/gpiochip171 = 27
-/sys/class/gpio/gpiochip198 = 29
-/sys/class/gpio/gpiochip227 = 29
+/sys/class/gpio/gpiochip413 = 2
+/sys/class/gpio/gpiochip415 = 4
+/sys/class/gpio/gpiochip419 = 8
+/sys/class/gpio/gpiochip427 = 27
+/sys/class/gpio/gpiochip454 = 29
+/sys/class/gpio/gpiochip483 = 29
 
 These widths should correlate to what was reported out of the device tree.
 
@@ -176,27 +174,27 @@ Let's try to read the state of the 'button_pio' ports that are controlled by the
 are connected to the KEY0 and KEY1 push buttons.  To being we 'export' the two
 gpio ports that we're interested in like this:
 
-root@cyclone5:~# echo 157 > /sys/class/gpio/export
-root@cyclone5:~# echo 158 > /sys/class/gpio/export
+root@atlas_socdk:~# echo 413 > /sys/class/gpio/export
+root@atlas_socdk:~# echo 414 > /sys/class/gpio/export
 
 And now you can see that we have two new entires in the sysfs, each representing
 the individual gpio port that we exported.
 
-root@cyclone5:~# ls /sys/class/gpio
-export       gpio158      gpiochip159  gpiochip171  gpiochip227
-gpio157      gpiochip157  gpiochip163  gpiochip198  unexport
+root@atlas_socdk:~# ls /sys/class/gpio
+export       gpio414      gpiochip415  gpiochip427  gpiochip483
+gpio413      gpiochip413  gpiochip419  gpiochip454  unexport
 
 Each of these individual gpio directories contain the following files:
 
-root@cyclone5:~# ls /sys/class/gpio/gpio157
+root@atlas_socdk:~# ls /sys/class/gpio/gpio413
 active_low  direction   edge        power       subsystem   uevent      value
-root@cyclone5:~# cat /sys/class/gpio/gpio157/active_low
+root@atlas_socdk:~# cat /sys/class/gpio/gpio413/active_low
 0
-root@cyclone5:~# cat /sys/class/gpio/gpio157/direction
+root@atlas_socdk:~# cat /sys/class/gpio/gpio413/direction
 in
-root@cyclone5:~# cat /sys/class/gpio/gpio157/edge
+root@atlas_socdk:~# cat /sys/class/gpio/gpio413/edge
 none
-root@cyclone5:~# cat /sys/class/gpio/gpio157/value
+root@atlas_socdk:~# cat /sys/class/gpio/gpio413/value
 1
 
 We can see from above that this port is defined as an active high input with no
@@ -205,20 +203,22 @@ currently 1.  Reading the 'value' sysfs file will always return the live state
 of this gpio port.  If we read the 'value' file a few times as we press and
 release the KEY0 push button we can see the live state change:
 
-root@cyclone5:~# cat /sys/class/gpio/gpio157/value
-0
-root@cyclone5:~# cat /sys/class/gpio/gpio157/value
+root@atlas_socdk:~# cat /sys/class/gpio/gpio413/value
 1
-root@cyclone5:~# cat /sys/class/gpio/gpio157/value
+root@atlas_socdk:~# cat /sys/class/gpio/gpio413/value
 0
-root@cyclone5:~# cat /sys/class/gpio/gpio157/value
+root@atlas_socdk:~# cat /sys/class/gpio/gpio413/value
+1
+root@atlas_socdk:~# cat /sys/class/gpio/gpio413/value
+0
+root@atlas_socdk:~# cat /sys/class/gpio/gpio413/value
 1
 
 Now if we write the phrase 'falling' into the 'edge' file then the edge capture
 interrupt functionality will be enabled for this gpio:
 
-root@cyclone5:~# echo falling > /sys/class/gpio/gpio157/edge
-root@cyclone5:~# cat /sys/class/gpio/gpio157/edge
+root@atlas_socdk:~# echo falling > /sys/class/gpio/gpio413/edge
+root@atlas_socdk:~# cat /sys/class/gpio/gpio413/edge
 falling
 
 At this point two things occur, if we could call poll() or select() against the
@@ -228,81 +228,79 @@ of the port.  The second thing that we can observe is that the
 '/proc/interrupts' file shows our newly active IRQ for this PIO that has been
 registered:
 
-root@cyclone5:~# cat /proc/interrupts | grep 345
-345:          1          0  altera-gpio  gpiolib
+root@atlas_socdk:~# cat /proc/interrupts | grep 144
+144:          1          0  altera-gpio   0  gpiolib
 
 If we press and release the KEY0 push button a few times we should see the 
 interrupt count increase.
 
-root@cyclone5:~# cat /proc/interrupts | grep 345
-345:          5          0  altera-gpio  gpiolib
+root@atlas_socdk:~# cat /proc/interrupts | grep 144
+144:          5          0  altera-gpio   0  gpiolib
 
-Now the gpio158 that we exported for the KEY1 push button will operate the same
-way.  If we press and release KEY1 while we monitor the 'value' file for gpio158
+Now the gpio414 that we exported for the KEY1 push button will operate the same
+way.  If we press and release KEY1 while we monitor the 'value' file for gpio414
 we should see the same behavior appear:
 
-root@cyclone5:~# cat /sys/class/gpio/gpio158/value
+root@atlas_socdk:~# cat /sys/class/gpio/gpio414/value
 1
-root@cyclone5:~# cat /sys/class/gpio/gpio158/value
+root@atlas_socdk:~# cat /sys/class/gpio/gpio414/value
 0
-root@cyclone5:~# cat /sys/class/gpio/gpio158/value
+root@atlas_socdk:~# cat /sys/class/gpio/gpio414/value
 1
-root@cyclone5:~# cat /sys/class/gpio/gpio158/value
+root@atlas_socdk:~# cat /sys/class/gpio/gpio414/value
 0
-root@cyclone5:~# cat /sys/class/gpio/gpio158/value
-1
 
 There is one other raw gpio on the Atlas board that we could interact with, it's
 the KEY2 push button connected to the HPS GPIO54 input which comes in through
 the gpio1 controller that is assigned to gpiochip198.  To export this gpio port
 we calculate it's position in gpio1 by using this equation:
 
-root@cyclone5:~# expr 198 + 54 - 29
-223
+root@atlas_socdk:~# expr 454 + 54 - 29
+479
                        ^     ^    ^
                        |     |    |
                        |     |    +--- the number of HPS GPIO ports in gpio0
                        |     +-------- the HPS GPIO we want
-                       +-------------- the base gpio in gpiochip198
+                       +-------------- the base gpio in gpiochip454
 
-So we want to export gpio 223 to gain access to this port, like this:
+So we want to export gpio 479 to gain access to this port, like this:
 
-root@cyclone5:~# echo 223 > /sys/class/gpio/export
-root@cyclone5:~# ls /sys/class/gpio/
-export       gpio158      gpiochip157  gpiochip163  gpiochip198  unexport
-gpio157      gpio223      gpiochip159  gpiochip171  gpiochip227
+root@atlas_socdk:~# echo 479 > /sys/class/gpio/export
+root@atlas_socdk:~# ls /sys/class/gpio/
+export       gpio414      gpiochip413  gpiochip419  gpiochip454  unexport
+gpio413      gpio479      gpiochip415  gpiochip427  gpiochip483
 
-And we see the gpio223 file in the sysfs now.  We can interact with this gpio
+And we see the gpio479 file in the sysfs now.  We can interact with this gpio
 the same way that we did the others:
 
-root@cyclone5:~# cat /sys/class/gpio/gpio223/value
+root@atlas_socdk:~# cat /sys/class/gpio/gpio479/value
 1
-root@cyclone5:~# cat /sys/class/gpio/gpio223/value
+root@atlas_socdk:~# cat /sys/class/gpio/gpio479/value
 0
-root@cyclone5:~# cat /sys/class/gpio/gpio223/value
+root@atlas_socdk:~# cat /sys/class/gpio/gpio479/value
 1
 
 And if we enable interrupts for this port like we did on the other port:
 
-root@cyclone5:~# echo falling > /sys/class/gpio/gpio223/edge
-root@cyclone5:~# cat /sys/class/gpio/gpio223/edge
+root@atlas_socdk:~# echo falling > /sys/class/gpio/gpio479/edge
+root@atlas_socdk:~# cat /sys/class/gpio/gpio479/edge
 falling
 
 Then we see this gpio controller appear in the '/proc/interrupts' listing:
 
-root@cyclone5:~# cat /proc/interrupts | grep 310
-310:          0          0  gpio-dwapb  gpiolib
+root@atlas_socdk:~# cat /proc/interrupts | grep 116
+116:          0          0  gpio-dwapb   3  0-0053
 
 When we are done using these gpio ports that we have exported into user space we
 can 'unexport' them by passing the same values into the 'unexport' sysfs file
 that we used to export the ports originally:
 
-root@cyclone5:~# echo 157 > /sys/class/gpio/unexport
-root@cyclone5:~# echo 158 > /sys/class/gpio/unexport
-root@cyclone5:~# echo 223 > /sys/class/gpio/unexport
-root@cyclone5:~# ls /sys/class/gpio
-export       gpiochip159  gpiochip171  gpiochip227
-gpiochip157  gpiochip163  gpiochip198  unexport
+root@atlas_socdk:~# echo 413 > /sys/class/gpio/unexport
+root@atlas_socdk:~# echo 414 > /sys/class/gpio/unexport
+root@atlas_socdk:~# echo 479 > /sys/class/gpio/unexport
+root@atlas_socdk:~# ls /sys/class/gpio
+export       gpiochip415  gpiochip427  gpiochip483
+gpiochip413  gpiochip419  gpiochip454  unexport
 
 And we can see that the exported entries have been removed from the sysfs.
 
