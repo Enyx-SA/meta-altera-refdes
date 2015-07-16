@@ -11,7 +11,7 @@ IMAGE_INSTALL += " \
         packagegroup-core-x11-xserver \
         xserver-nodm-init \
         xserver-common \
-        gimp abiword gedit midori epiphany firefox \
+        gimp abiword gedit midori epiphany \
         imagemagick \
 "
 
