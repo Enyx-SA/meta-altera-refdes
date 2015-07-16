@@ -20,6 +20,10 @@ set output-meta on
 # do not bell on tab-completion 
 # set bell-style none 
 
+# allow the use of the Home/End keys
+"\e[1~": beginning-of-line
+"\e[4~": end-of-line
+
 # some defaults / modifications for the emacs mode
 $if mode=emacs
 
