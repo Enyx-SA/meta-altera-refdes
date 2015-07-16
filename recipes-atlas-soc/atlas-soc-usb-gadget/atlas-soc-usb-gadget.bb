@@ -41,6 +41,8 @@ ALLOW_EMPTY_${PN} = "1"
 
 FILES_${PN} = "${base_libdir}/systemd/system/atlassoc-gadget-init.service \
                ${sysconfdir}/systemd/ \
+               ${datadir}/${PN}/ \
+               ${datadir}/${PN}/fat_image.img \
               "
 
 FILES_${PN}-network = "${base_libdir}/systemd/system/network-gadget-init.service \
