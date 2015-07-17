@@ -3,7 +3,7 @@ DESCRIPTION = "Atlas SoC scripts to start x11vnc"
 AUTHOR = "Dalon Westergreen <dwesterg@gmail.com>"
 SECTION = "atlas-soc"
 
-PR = "r7"
+PR = "r8"
 
 inherit systemd
 

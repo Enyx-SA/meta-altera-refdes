@@ -8,6 +8,8 @@ LIC_FILES_CHKSUM="file://${COMMON_LICENSE_DIR}/BSD-3-Clause;md5=550794465ba0ec53
 inherit allarch
 ALLOW_EMPTY_${PN} = "1"
 
+PR = "r1"
+
 # Post process the lighttpd.conf file to enable cgi module, sets home page and update 404 page
 pkg_postinst_${PN}() {
 #!/bin/sh
