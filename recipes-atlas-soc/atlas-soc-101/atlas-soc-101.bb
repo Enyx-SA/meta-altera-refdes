@@ -7,7 +7,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=a8f924340e3ce1ff14c0f9f53b9a6da4"
 
 PR = "r4"
 SRCREV = "${AUTOREV}"
-PV = "1.0-${PR}+git${SRCREV}"
+PV = "1.0${PR}+git${SRCREV}"
 
 SRC_URI = "git://github.com/dwesterg/atlas-soc-webcontent.git"
 S = "${WORKDIR}/git"
