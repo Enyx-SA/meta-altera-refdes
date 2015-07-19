@@ -31,3 +31,11 @@ IMAGE_INSTALL += " \
 	cmake \
 "
 export IMAGE_BASENAME = "atlas-soc-console-image"
+
+# Hack to adjust timestamp forward and ensure timestamp format matches load-timestamp.sh in meta-angstrom/systemd
+
+rootfs_update_timestamp() {
+        date -u +%4Y%2m%2d%2H%2M -d "+1 days" >${IMAGE_ROOTFS}/etc/timestamp
+}
+
+EXPORT_FUNCTIONS rootfs_update_timestamp
