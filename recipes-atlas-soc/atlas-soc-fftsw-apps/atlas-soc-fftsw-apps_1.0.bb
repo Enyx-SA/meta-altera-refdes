@@ -5,7 +5,7 @@ LIC_FILES_CHKSUM = "file://fftsw_apps/COPYING;md5=12f884d2ae1ff87c09e5b7ccc2c4ca
 
 SRCREV = "${AUTOREV}"
 PR = "r7"
-PV = "1.0${PR}+git${SRCREV}"
+PV = "1.0${PR}+git${SRCPV}"
 
 SRC_URI = " \
 	git://github.com/dwesterg/atlas-soc-fftsw-apps.git;name=fftsw_apps;destsuffix=fftsw_apps \
