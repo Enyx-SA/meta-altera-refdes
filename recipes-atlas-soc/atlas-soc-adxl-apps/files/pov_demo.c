@@ -57,6 +57,7 @@ char bow_tie_image_array[] = {
 };
 
 int g_stop_running = 0;
+int g_termination_count = 0;
 
 void write_sysfs_cntl_file(const char *dir_name, const char *file_name,
 		const char *write_str);
@@ -70,9 +71,32 @@ void my_sig_child_handler(int signal_number) {
 
 void my_termination_handler(int signal_number) {
 
+	int result;
+	pid_t child_pid;
+	int status;
+	
+	if(g_termination_count > 0)
+		return;
+
+	g_termination_count++;
+			
 	// enable heartbeat LED
 	write_sysfs_cntl_file("/sys/class/leds/hps_led0", "trigger", 
 			"heartbeat");
+	
+	result = kill(-(getpgrp()), SIGTERM);
+	if(result < 0) {
+		error(0, errno, "SIGTERM pgrp");
+		result = kill(-(getpgrp()), SIGKILL);
+		if(result < 0)
+			error(0, errno, "SIGKILL pgrp");
+	}
+
+	do {
+		child_pid = wait(&status);
+		if((child_pid == -1) && (errno != ECHILD))
+			error(1, errno, "wait");
+	} while(child_pid != -1);
 	
 	// print termination signal that we received
 	if(signal_number == SIGTERM)
