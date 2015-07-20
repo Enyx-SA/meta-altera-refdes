@@ -11,11 +11,13 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/LICENSE;md5=4d92cd373abda3937c2bc47fbc49d690"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
+SRCREV = "${AUTOREV}"
+PV = "1.0${PR}+git${SRCPV}"
 
 SRC_URI = "file://atlassoc-gadget-init.service \
            file://udhcpd.conf \
            file://g-ether-load.sh \
-           file://fat_image.img.tgz \
+	   git://github.com/dwesterg/atlas-drivers.git \
           "
 
 do_install() {
@@ -32,7 +34,7 @@ do_install() {
 	( cd ${D}${sysconfdir}/systemd/system/getty.target.wants && ln -s /lib/systemd/system/serial-getty@.service serial-getty@ttyGS0.service )
 
 	install -d ${D}${datadir}/${PN}
-	cp ${WORKDIR}/fat_image.img ${D}${datadir}/${PN}
+	tar -xzvf ${WORKDIR}/git/fat_image.img.tgz -C ${D}${datadir}/${PN}
 }
 
 PACKAGES =+ "${PN}-network ${PN}-udhcpd"
