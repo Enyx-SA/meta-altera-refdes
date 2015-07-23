@@ -1,7 +1,6 @@
 require atlas-soc-console-image.bb
 
 IMAGE_INSTALL += " \
-	angstrom-gdm-xfce-hack \
 	packagegroup-xfce-base \
 	xterm \
 	angstrom-x11vnc-xinit \
