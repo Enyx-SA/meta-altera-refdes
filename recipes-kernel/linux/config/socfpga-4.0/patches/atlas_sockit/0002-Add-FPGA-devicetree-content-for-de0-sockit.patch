@@ -1,26 +1,14 @@
-From f807fd67cbcf06697de1c9bd6b2b1617e506eeed Mon Sep 17 00:00:00 2001
+From c0c7f0e2cfddfc3fa0f1dea25a2c3937cbde2a5b Mon Sep 17 00:00:00 2001
 From: Dalon Westergreen <dwesterg@gmail.com>
-Date: Mon, 13 Jul 2015 14:42:26 -0700
-Subject: [PATCH 2/2] Add FPGA devicetree content for de0 (Atlas) board
+Date: Thu, 23 Jul 2015 08:50:14 -0700
+Subject: [PATCH 2/2] Add FPGA devicetree content for de0 sockit
 
 ---
- arch/arm/boot/dts/socfpga_cyclone5_de0.dts       |   1 +
- arch/arm/boot/dts/socfpga_cyclone5_de0_fpga.dtsi | 225 +++++++++++++++++++++++
+ arch/arm/boot/dts/socfpga_cyclone5_de0_fpga.dtsi  | 225 ++++++++++++++++++++++
+ arch/arm/boot/dts/socfpga_cyclone5_de0_sockit.dts |   1 +
  2 files changed, 226 insertions(+)
  create mode 100644 arch/arm/boot/dts/socfpga_cyclone5_de0_fpga.dtsi
 
-diff --git a/arch/arm/boot/dts/socfpga_cyclone5_de0.dts b/arch/arm/boot/dts/socfpga_cyclone5_de0.dts
-index ef6d540..04de726 100644
---- a/arch/arm/boot/dts/socfpga_cyclone5_de0.dts
-+++ b/arch/arm/boot/dts/socfpga_cyclone5_de0.dts
-@@ -15,6 +15,7 @@
-  */
- 
- #include "socfpga_cyclone5.dtsi"
-+#include "socfpga_cyclone5_de0_fpga.dtsi"
- 
- / {
-        model = "Terasic DE-0(Atlas)";
 diff --git a/arch/arm/boot/dts/socfpga_cyclone5_de0_fpga.dtsi b/arch/arm/boot/dts/socfpga_cyclone5_de0_fpga.dtsi
 new file mode 100644
 index 0000000..b91288c
@@ -252,6 +240,18 @@ index 0000000..b91288c
 +		};
 +	};
 +};
+diff --git a/arch/arm/boot/dts/socfpga_cyclone5_de0_sockit.dts b/arch/arm/boot/dts/socfpga_cyclone5_de0_sockit.dts
+index 44ded19..92e8c3f 100644
+--- a/arch/arm/boot/dts/socfpga_cyclone5_de0_sockit.dts
++++ b/arch/arm/boot/dts/socfpga_cyclone5_de0_sockit.dts
+@@ -15,6 +15,7 @@
+  */
+ 
+ #include "socfpga_cyclone5.dtsi"
++#include "socfpga_cyclone5_de0_fpga.dtsi"
+ 
+ / {
+        model = "Terasic DE-0(Atlas)";
 -- 
 2.1.0
 
