@@ -1,4 +1,4 @@
-define KMACHINE atlas_socdk
+define KMACHINE atlas_sockit
 define KTYPE standard
 define KARCH arm
 
