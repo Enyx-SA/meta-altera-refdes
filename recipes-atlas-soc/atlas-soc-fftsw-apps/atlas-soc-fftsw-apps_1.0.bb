@@ -4,11 +4,14 @@ LIC_FILES_CHKSUM = "file://fftsw_apps/COPYING;md5=12f884d2ae1ff87c09e5b7ccc2c4ca
 
 
 SRCREV = "${AUTOREV}"
-PR = "r7"
+PR = "r9"
 PV = "1.0${PR}+git${SRCPV}"
+
+inherit systemd
 
 SRC_URI = " \
 	git://github.com/dwesterg/atlas-soc-fftsw-apps.git;name=fftsw_apps;destsuffix=fftsw_apps \
+	file://atlas-soc-fftsw-init.service \
 "
 S = "${WORKDIR}"
 
@@ -25,6 +28,9 @@ do_compile () {
 }
 
 do_install () {
+
+	install -d ${D}${base_libdir}/systemd/system
+	install -m 0644 ${WORKDIR}/*.service ${D}${base_libdir}/systemd/system
 	
 	cd ${S}/fftsw_apps
 
@@ -53,4 +59,8 @@ FILES_${PN}-src += "examples/fft/fft_src.tgz"
 FILES_${PN}-src += "examples/fft/fft_sandbox.tgz"
 FILES_${PN}-src += "examples/fft/src/"
 FILES_${PN}-src += "examples/fft/sandbox/"
+
+NATIVE_SYSTEMD_SUPPORT = "1"
+SYSTEMD_PACKAGES = "${PN}"
+SYSTEMD_SERVICE_${PN} = "atlas-soc-fftsw-init.service"
 
