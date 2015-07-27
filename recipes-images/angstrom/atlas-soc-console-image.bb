@@ -24,6 +24,7 @@ IMAGE_INSTALL += " \
 	atlas-soc-usb-gadget \
 	atlas-soc-fftdriver-mod \
 	atlas-soc-fftsw-apps \
+	atlas-soc-fftsw-apps-init \
 	atlas-soc-fftsw-apps-src \
 	atlas-soc-gpio-apps \
 	atlas-soc-adxl-apps \
