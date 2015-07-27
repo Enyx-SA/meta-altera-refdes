@@ -158,10 +158,6 @@ int main(void) {
 	if(main_child_pid != 0) {
 		int int_result;
 
-		// disable heartbeat LED
-		write_sysfs_cntl_file("/sys/class/leds/hps_led0", "trigger", 
-				"none");
-		
 		// register a SIGTERM handler
 		new_action.sa_handler = my_termination_handler;
 		sigemptyset(&new_action.sa_mask);
@@ -177,7 +173,7 @@ int main(void) {
 				error(1, errno, "sigaction");
 		}
 		else
-			error(1, 0, "SIGTERM handler already installed");
+			error(0, 0, "SIGTERM handler already installed");
 
 		// register a SIGINT handler
 		result = sigaction(SIGINT, NULL, &old_action);
@@ -190,7 +186,7 @@ int main(void) {
 				error(1, errno, "sigaction");
 		}
 		else
-			error(1, 0, "SIGINT handler already installed");
+			error(0, 0, "SIGINT handler already installed");
 
 		// register a SIGQUIT handler
 		result = sigaction(SIGQUIT, NULL, &old_action);
@@ -203,8 +199,12 @@ int main(void) {
 				error(1, errno, "sigaction");
 		}
 		else
-			error(1, 0, "SIGINT handler already installed");
+			error(0, 0, "SIGQUIT handler already installed");
 
+		// disable heartbeat LED
+		write_sysfs_cntl_file("/sys/class/leds/hps_led0", "trigger", 
+				"none");
+		
 		// wait for the main child to terminate
 		waitpid(main_child_pid, &int_result, 0);
 
