@@ -118,7 +118,7 @@ index 0000000..44ded19
 +       speed-mode = <0>;
 +
 +       adxl345: adxl345@0 {
-+               compatible = "adi,adxl345";
++               compatible = "adxl34x";
 +               reg = <0x53>;
 +
 +               interrupt-parent = <&portc>;
