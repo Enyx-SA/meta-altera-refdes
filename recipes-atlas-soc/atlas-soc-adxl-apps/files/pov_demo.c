@@ -153,6 +153,11 @@ int main(void) {
 	const char *led_off_str = "0";
 	int led_off_str_len = 1;
 	
+	// create my own process group
+	result = setpgid(0, 0);
+	if(result < 0)
+		error(1, errno, "setpgid");
+
 	// fork main to deal with heartbeat LED
 	main_child_pid = fork();
 	if(main_child_pid != 0) {
