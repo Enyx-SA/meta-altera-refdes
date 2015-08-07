@@ -16,20 +16,24 @@ tree maintained by the kernel in the procfs.
 ################################################################################
 # find adxl34x in device tree
 ################################################################################
-function find_adxl_dt () {
-for NEXT in $(find -L /proc/device-tree -name "compatible" | sort)
-do
-cat ${NEXT} | grep "adi,adxl345" > /dev/null && {
-ADXL_DIRNAME="$(dirname ${NEXT})"
-echo ${ADXL_DIRNAME}
-echo -e "\tcompatible = '$(cat ${ADXL_DIRNAME}/compatible)'"
-echo -e "\t      name = '$(cat ${ADXL_DIRNAME}/name)'"
-REG_HEX="$(hexdump -v -e '"0x"' -e '4/1 "%02x"' "${ADXL_DIRNAME}/reg")"
-echo -e "\t       reg = '${REG_HEX}'"
-}
-done
+function find_adxl_dt ()
+{
+    for NEXT in $(find -L /proc/device-tree -name "compatible" | sort);
+    do
+        cat ${NEXT} | grep "adxl34x" > /dev/null && {
+            ADXL_DIRNAME="$(dirname ${NEXT})";
+            echo ${ADXL_DIRNAME};
+            echo -e "\tcompatible = '$(cat ${ADXL_DIRNAME}/compatible)'";
+            echo -e "\t      name = '$(cat ${ADXL_DIRNAME}/name)'";
+            REG_HEX="$(hexdump -v -e '"0x"' -e '4/1 "%02x"' "${ADXL_DIRNAME}/reg")";
+            echo -e "\t       reg = '${REG_HEX}'"
+        };
+    done
 }
 ################################################################################
+
+The function above is provided in the file 'find_adxl_dt.src', which you can
+source into your environment by running 'source find_adxl_dt.src'.
 
 When we run the function above on the Atlas target it searches for nodes
 containing the 'compatible' string containing 'adi,adxl345' which is the
@@ -39,7 +43,7 @@ path to the node that it found and extracts the compatible string and 'name' and
 
 root@atlas_socdk:~# find_adxl_dt
 /proc/device-tree/soc/i2c@ffc04000/adxl345@0
-        compatible = 'adi,adxl345'
+        compatible = 'adxl34x'
               name = 'adxl345'
                reg = '0x00000053'
 root@atlas_socdk:~#

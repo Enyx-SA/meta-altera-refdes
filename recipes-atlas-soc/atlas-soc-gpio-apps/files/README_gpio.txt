@@ -15,32 +15,37 @@ tree maintained by the kernel in the procfs.
 ################################################################################
 # find gpio controllers in device tree
 ################################################################################
-function find_gpio_controllers_dt () {
-for NEXT in $(find -L /proc/device-tree -name "compatible" | sort)
-do
-cat ${NEXT} | grep -xz "snps,dw-apb-gpio" > /dev/null && {
-GPIO_DIRNAME="$(dirname ${NEXT})"
-echo ${GPIO_DIRNAME}
-GPIO_COMPATIBLE="$(cat ${GPIO_DIRNAME}/compatible)"
-echo -e "\tcompatible = '${GPIO_COMPATIBLE}'"
-WF="${GPIO_DIRNAME}/gpio-controller@0/snps,nr-gpios"
-GPIO_HEX_WIDTH="$(hexdump -v -e '"0x"' -e '4/1 "%02x"' "${WF}")"
-GPIO_WIDTH=$(printf "%d" ${GPIO_HEX_WIDTH})
-echo -e "\t     width = '${GPIO_WIDTH}'"
-}
-cat ${NEXT} | grep -e "altr,pio" > /dev/null && {
-GPIO_DIRNAME="$(dirname ${NEXT})"
-echo ${GPIO_DIRNAME}
-GPIO_COMPATIBLE="$(cat ${GPIO_DIRNAME}/compatible)"
-echo -e "\tcompatible = '${GPIO_COMPATIBLE}'"
-WF="${GPIO_DIRNAME}/altr,gpio-bank-width"
-GPIO_HEX_WIDTH="$(hexdump -v -e '"0x"' -e '4/1 "%02x"' "${WF}")"
-GPIO_WIDTH=$(printf "%d" ${GPIO_HEX_WIDTH})
-echo -e "\t     width = '${GPIO_WIDTH}'"
-}
-done
+function find_gpio_controllers_dt ()
+{
+    for NEXT in $(find -L /proc/device-tree -name "compatible" | sort);
+    do
+        cat ${NEXT} | grep -xz "snps,dw-apb-gpio" > /dev/null && {
+            GPIO_DIRNAME="$(dirname ${NEXT})";
+            echo ${GPIO_DIRNAME};
+            GPIO_COMPATIBLE="$(cat ${GPIO_DIRNAME}/compatible)";
+            echo -e "\tcompatible = '${GPIO_COMPATIBLE}'";
+            WF="${GPIO_DIRNAME}/gpio-controller@0/snps,nr-gpios";
+            GPIO_HEX_WIDTH="$(hexdump -v -e '"0x"' -e '4/1 "%02x"' "${WF}")";
+            GPIO_WIDTH=$(printf "%d" ${GPIO_HEX_WIDTH});
+            echo -e "\t     width = '${GPIO_WIDTH}'"
+        };
+        cat ${NEXT} | grep -e "altr,pio" > /dev/null && {
+            GPIO_DIRNAME="$(dirname ${NEXT})";
+            echo ${GPIO_DIRNAME};
+            GPIO_COMPATIBLE="$(cat ${GPIO_DIRNAME}/compatible)";
+            echo -e "\tcompatible = '${GPIO_COMPATIBLE}'";
+            WF="${GPIO_DIRNAME}/altr,gpio-bank-width";
+            GPIO_HEX_WIDTH="$(hexdump -v -e '"0x"' -e '4/1 "%02x"' "${WF}")";
+            GPIO_WIDTH=$(printf "%d" ${GPIO_HEX_WIDTH});
+            echo -e "\t     width = '${GPIO_WIDTH}'"
+        };
+    done
 }
 ################################################################################
+
+The function above is provided in the file 'find_gpio_controllers_dt.src', which
+you can source into your environment by running
+'source find_gpio_controllers_dt.src'.
 
 When we run the function above on the Atlas target it searches for nodes
 containing the 'compatible' string fragments of 'snps,dw-apb-gpio' or 'altr,pio'

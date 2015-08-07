@@ -2,7 +2,7 @@ SUMMARY = "Example applications for Atlas SoC FPGA GPIO manipulation"
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=12f884d2ae1ff87c09e5b7ccc2c4ca7e"
 
-PR = "r1"
+PR = "r2"
 PV = "1.0"
 
 SRC_URI = "\
@@ -24,6 +24,9 @@ SRC_URI = "\
 	file://watch_switch_events.c \
 	file://watch_switch_events_ioctl.c \
 	file://watch_switch_events.sh \
+	file://find_gpio_controllers_dt.src \
+	file://find_gpio_leds_dt.src \
+	file://find_gpio_keys_dt.src \
 "
 TOP_FILES  = "COPYING"
 TOP_FILES += "README_first.txt"
@@ -34,11 +37,13 @@ RAW_GPIO_FILES += "poll_KEY0_pb_state.c"
 RAW_GPIO_FILES += "README_gpio.txt"
 RAW_GPIO_FILES += "show_KEY0_pb_state.c"
 RAW_GPIO_FILES += "show_KEY0_pb_state.sh"
+RAW_GPIO_FILES += "find_gpio_controllers_dt.src"
 
 GPIO_LEDS_FILES  = "build_toggle_fpga_leds.sh"
 GPIO_LEDS_FILES += "README_gpio-leds.txt"
 GPIO_LEDS_FILES += "toggle_fpga_leds.c"
 GPIO_LEDS_FILES += "toggle_fpga_leds.sh"
+GPIO_LEDS_FILES += "find_gpio_leds_dt.src"
 
 GPIO_KEYS_FILES  = "build_watch_switch_events_ioctl.sh"
 GPIO_KEYS_FILES += "build_watch_switch_events.sh"
@@ -46,6 +51,7 @@ GPIO_KEYS_FILES += "README_gpio-keys.txt"
 GPIO_KEYS_FILES += "watch_switch_events.c"
 GPIO_KEYS_FILES += "watch_switch_events_ioctl.c"
 GPIO_KEYS_FILES += "watch_switch_events.sh"
+GPIO_KEYS_FILES += "find_gpio_keys_dt.src"
 
 S = "${WORKDIR}"
 

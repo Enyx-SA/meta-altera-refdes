@@ -2,7 +2,7 @@ SUMMARY = "Example applications for Atlas SoC accelerometer"
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=12f884d2ae1ff87c09e5b7ccc2c4ca7e"
 
-PR = "r4"
+PR = "r5"
 
 SRC_URI = "\
 	file://adxl_calibrate.sh \
@@ -15,6 +15,7 @@ SRC_URI = "\
 	file://README_SRC.txt \
 	file://tap_detect.c \
 	file://watch_adxl.c \
+	file://find_adxl_dt.src \
 "
 
 ADXL_BIN_FILES  = "pov_demo"
@@ -31,6 +32,7 @@ ADXL_SANDBOX_FILES += "COPYING"
 ADXL_SANDBOX_FILES += "README_SANDBOX.txt"
 ADXL_SANDBOX_FILES += "tap_detect.c"
 ADXL_SANDBOX_FILES += "watch_adxl.c"
+ADXL_SANDBOX_FILES += "find_adxl_dt.src"
 
 S = "${WORKDIR}"
 
