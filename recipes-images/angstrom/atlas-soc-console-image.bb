@@ -30,6 +30,7 @@ IMAGE_INSTALL += " \
 	atlas-soc-adxl-apps \
 	gnuplot \
 	cmake \
+	gator \
 "
 export IMAGE_BASENAME = "atlas-soc-console-image"
 
