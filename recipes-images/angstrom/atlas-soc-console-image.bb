@@ -31,6 +31,7 @@ IMAGE_INSTALL += " \
 	gnuplot \
 	cmake \
 	gator \
+	gator-mod \
 "
 export IMAGE_BASENAME = "atlas-soc-console-image"
 
