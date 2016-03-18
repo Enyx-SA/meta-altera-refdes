@@ -1,4 +1,4 @@
-define KMACHINE atlas_sockit
+define KMACHINE atlas-sockit
 define KTYPE standard
 define KARCH arm
 
@@ -6,12 +6,12 @@ include bsp/include/cyclone5_arria5_arria10.scc
 
 # Atlas Specific patches
 # Add dts
-patch patches/atlas_sockit/0001-Add-devicetree-for-de0-sockit.patch
-patch patches/atlas_sockit/0002-Add-FPGA-devicetree-content-for-de0-sockit.patch
+patch patches/atlas-sockit/0001-Add-devicetree-for-de0-sockit.patch
+patch patches/atlas-sockit/0002-Add-FPGA-devicetree-content-for-de0-sockit.patch
 
 # Add patch to fix bug in altera-gpio driver
 patch patches/0001-altera_gpio_get-bit-mask-error-in-gpio-altera.c.patch
 
 # Atlas configs
-include features/atlas_sockit.scc
+include features/atlas-sockit.scc
 
